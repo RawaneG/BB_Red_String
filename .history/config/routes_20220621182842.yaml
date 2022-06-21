@@ -1,0 +1,6 @@
+controllers:
+    resource: ../api/Controller/
+    type: attribute
+authentication_token:
+    path: /api/login
+    methods: ['POST']
