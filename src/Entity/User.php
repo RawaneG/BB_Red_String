@@ -79,6 +79,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     ])]
     protected $prenom;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private $token;
+
+    #[ORM\Column(type: 'boolean')]
+    private $isEnabled;
+
+    #[ORM\Column(type: 'datetime')]
+    private $expiredAt;
+
+    public function generateToken()
+    {
+        $this->expiredAt = new \DateTime("+1 day");
+        $this->token = "token";
+    }
+
+    public function __construct()
+    {
+        $this->isEnabled = false;
+        $this->generateToken();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -189,6 +210,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPlainPassword($plainPassword)
     {
         $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(string $token): self
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    public function isIsEnabled(): ?bool
+    {
+        return $this->isEnabled;
+    }
+
+    public function setIsEnabled(bool $isEnabled): self
+    {
+        $this->isEnabled = $isEnabled;
+
+        return $this;
+    }
+
+    public function getExpiredAt(): ?\DateTimeInterface
+    {
+        return $this->expiredAt;
+    }
+
+    public function setExpiredAt(\DateTimeInterface $expiredAt): self
+    {
+        $this->expiredAt = $expiredAt;
 
         return $this;
     }

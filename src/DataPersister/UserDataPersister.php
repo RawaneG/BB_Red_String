@@ -3,6 +3,7 @@
 namespace App\DataPersister;
 
 use App\Entity\User;
+use App\Services\Mailer;
 use Doctrine\ORM\EntityManagerInterface;
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -14,10 +15,12 @@ class UserDataPersister implements DataPersisterInterface
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordEncoder
+        UserPasswordHasherInterface $passwordEncoder,
+        Mailer $mailer
     ) {
         $this->_entityManager = $entityManager;
         $this->_passwordEncoder = $passwordEncoder;
+        $this->mailer = $mailer;
     }
 
     /**
@@ -46,6 +49,7 @@ class UserDataPersister implements DataPersisterInterface
 
         $this->_entityManager->persist($data);
         $this->_entityManager->flush();
+        $this->mailer->mailSender($data);
     }
 
     /**
