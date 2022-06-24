@@ -80,18 +80,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     protected $prenom;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $token;
+    protected $token;
 
     #[ORM\Column(type: 'boolean')]
-    private $isEnabled;
+    protected $isEnabled;
 
     #[ORM\Column(type: 'datetime')]
-    private $expiredAt;
+    protected $expiredAt;
 
     public function generateToken()
     {
         $this->expiredAt = new \DateTime("+1 day");
-        $this->token = "token";
+        $this->token = rtrim(strtr(base64_encode(random_bytes(128)), '+/', '-_'), '=');
     }
 
     public function __construct()
@@ -134,7 +134,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = 'ROLE_VISITEUR';
 
         return array_unique($roles);
     }

@@ -13,4 +13,9 @@ use ApiPlatform\Core\Annotation\ApiResource;
 )]
 class Gestionnaire extends User
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->roles = ['ROLE_GESTIONNAIRE'];
+    }
 }

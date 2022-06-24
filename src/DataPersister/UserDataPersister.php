@@ -22,7 +22,6 @@ class UserDataPersister implements DataPersisterInterface
         $this->_passwordEncoder = $passwordEncoder;
         $this->mailer = $mailer;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -30,7 +29,6 @@ class UserDataPersister implements DataPersisterInterface
     {
         return $data instanceof User;
     }
-
     /**
      * @param User $data
      */

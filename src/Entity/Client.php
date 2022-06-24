@@ -15,7 +15,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 class Client extends User
 {
-
+    public function __construct()
+    {
+        parent::__construct();
+        $this->roles = ['ROLE_CLIENT'];
+    }
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
         "client:read",
