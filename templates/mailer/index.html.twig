@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mailer!{% endblock %}
+
+{% block body %}
+    <h1>BIENVENUE {{user.nom}}</h1>
+    <p>Cliquez sur ce lien pour activez votre compte ! </p>
+    <p>
+        <a href="{{url('api_users_patch_collection', {"token":user.token})}}">Ici</a>
+    </p>
+{% endblock %}

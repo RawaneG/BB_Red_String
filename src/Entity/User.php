@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
+use App\Controller\MailerController;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\SerializedName;
@@ -18,7 +19,17 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
     "client" => "Client",
     "gestionnaire" => "Gestionnaire"
 ])]
-#[ApiResource()]
+#[ApiResource(
+    collectionOperations: [
+        "patch" =>
+        [
+            "method" => "patch",
+            "deserialize" => false,
+            "path" => "/rawane/{token}",
+            "controller" => MailerController::class
+        ]
+    ]
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]

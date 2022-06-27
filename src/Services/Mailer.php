@@ -14,22 +14,20 @@ class Mailer
         $this->mailer = $mailer;
         $this->twig = $twig;
     }
-    /**
-     *@param User $user
-     */
-    public function mailSender($user, $subject = "Brazil Burger", $body = "<h1>Bienvenue</h1>")
+
+    public function mailSender($user, $subject = "Brazil Burger")
     {
-        $body =
-            "
-            <h1>Bienvenue</h1>
-            <p>Votre compte a été crée avec succès</p>
-            ";
         $from = "bb@gmail.com";
         $email = (new Email())
             ->from($from)
             ->to($user->getLogin())
             ->subject($subject)
-            ->html($body);
+            ->html($this->twig->render(
+                'mailer/index.html.twig',
+                [
+                    "user" => $user
+                ]
+            ));
         $this->mailer->send($email);
     }
 }
