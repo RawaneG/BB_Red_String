@@ -2,16 +2,30 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\BurgerRepository;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: BurgerRepository::class)]
 #[ApiResource(
-    normalizationContext: ["groups" => ["burger:read"]],
-    denormalizationContext: ["groups" => ["burger:write"]]
+    collectionOperations: [
+        "get" =>
+        [
+            "method" => "get",
+            "normalization_context" => ["groups" => ["burger:read"]]
+        ],
+        "post" =>
+        [
+            "method" => "post",
+            "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            "securiy_message" => "Vous n'êtes pas autorisé à utiliser ce service",
+            "normalization_context" => ["groups" => ["burger:read"]],
+            "denormalization_context" => ["groups" => ["burger:write"]]
+        ]
+    ],
+    itemOperations: ["put", "get"]
 )]
 class Burger extends Produit
 {
@@ -20,9 +34,6 @@ class Burger extends Produit
 
     #[ORM\ManyToMany(targetEntity: Menu::class, inversedBy: 'burgers')]
     private $menu;
-
-    #[ORM\ManyToMany(targetEntity: Catalogue::class, mappedBy: 'burger')]
-    private $catalogues;
 
     public function __construct()
     {
@@ -63,33 +74,6 @@ class Burger extends Produit
     public function removeMenu(Menu $menu): self
     {
         $this->menu->removeElement($menu);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Catalogue>
-     */
-    public function getCatalogues(): Collection
-    {
-        return $this->catalogues;
-    }
-
-    public function addCatalogue(Catalogue $catalogue): self
-    {
-        if (!$this->catalogues->contains($catalogue)) {
-            $this->catalogues[] = $catalogue;
-            $catalogue->addBurger($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCatalogue(Catalogue $catalogue): self
-    {
-        if ($this->catalogues->removeElement($catalogue)) {
-            $catalogue->removeBurger($this);
-        }
 
         return $this;
     }

@@ -10,8 +10,22 @@ use ApiPlatform\Core\Annotation\ApiResource;
 
 #[ORM\Entity(repositoryClass: MenuRepository::class)]
 #[ApiResource(
-    normalizationContext: ["groups" => ["menu:read"]],
-    denormalizationContext: ["groups" => ["menu:write"]]
+    collectionOperations: [
+        "get" =>
+        [
+            "method" => "get",
+            "normalization_context" => ["groups" => ["menu:read"]]
+        ],
+        "post" =>
+        [
+            "method" => "post",
+            "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            "securiy_message" => "Vous n'êtes pas autorisé à utiliser ce service",
+            "normalization_context" => ["groups" => ["menu:read"]],
+            "denormalization_context" => ["groups" => ["menu:write"]]
+        ]
+    ],
+    itemOperations: ["put", "get"]
 )]
 class Menu extends Produit
 {
@@ -21,18 +35,18 @@ class Menu extends Produit
     #[ORM\ManyToMany(targetEntity: Burger::class, mappedBy: 'menu')]
     private $burgers;
 
-    #[ORM\ManyToMany(targetEntity: Complement::class, inversedBy: 'menus')]
-    private $complement;
+    #[ORM\ManyToMany(targetEntity: Boissons::class, mappedBy: 'menu')]
+    private $boissons;
 
-    #[ORM\ManyToMany(targetEntity: Catalogue::class, mappedBy: 'menu')]
-    private $catalogues;
+    #[ORM\ManyToMany(targetEntity: Frites::class, mappedBy: 'menu')]
+    private $frites;
 
     public function __construct()
     {
         parent::__construct();
         $this->burgers = new ArrayCollection();
-        $this->complement = new ArrayCollection();
-        $this->catalogues = new ArrayCollection();
+        $this->boissons = new ArrayCollection();
+        $this->frites = new ArrayCollection();
     }
 
     public function getGestionnaire(): ?Gestionnaire
@@ -75,51 +89,54 @@ class Menu extends Produit
     }
 
     /**
-     * @return Collection<int, Complement>
+     * @return Collection<int, Boissons>
      */
-    public function getComplement(): Collection
+    public function getBoissons(): Collection
     {
-        return $this->complement;
+        return $this->boissons;
     }
 
-    public function addComplement(Complement $complement): self
+    public function addBoisson(Boissons $boisson): self
     {
-        if (!$this->complement->contains($complement)) {
-            $this->complement[] = $complement;
+        if (!$this->boissons->contains($boisson)) {
+            $this->boissons[] = $boisson;
+            $boisson->addMenu($this);
         }
 
         return $this;
     }
 
-    public function removeComplement(Complement $complement): self
+    public function removeBoisson(Boissons $boisson): self
     {
-        $this->complement->removeElement($complement);
+        if ($this->boissons->removeElement($boisson)) {
+            $boisson->removeMenu($this);
+        }
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Catalogue>
+     * @return Collection<int, Frites>
      */
-    public function getCatalogues(): Collection
+    public function getFrites(): Collection
     {
-        return $this->catalogues;
+        return $this->frites;
     }
 
-    public function addCatalogue(Catalogue $catalogue): self
+    public function addFrite(Frites $frite): self
     {
-        if (!$this->catalogues->contains($catalogue)) {
-            $this->catalogues[] = $catalogue;
-            $catalogue->addMenu($this);
+        if (!$this->frites->contains($frite)) {
+            $this->frites[] = $frite;
+            $frite->addMenu($this);
         }
 
         return $this;
     }
 
-    public function removeCatalogue(Catalogue $catalogue): self
+    public function removeFrite(Frites $frite): self
     {
-        if ($this->catalogues->removeElement($catalogue)) {
-            $catalogue->removeMenu($this);
+        if ($this->frites->removeElement($frite)) {
+            $frite->removeMenu($this);
         }
 
         return $this;

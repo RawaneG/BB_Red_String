@@ -21,9 +21,6 @@ class Gestionnaire extends User
     #[ORM\OneToMany(mappedBy: 'gestionnaire', targetEntity: Burger::class)]
     private $burger;
 
-    #[ORM\OneToMany(mappedBy: 'gestionnaire', targetEntity: Complement::class)]
-    private $complement;
-
     #[ORM\ManyToOne(targetEntity: Livreur::class, inversedBy: 'gestionnaires')]
     private $livreur;
 
@@ -39,7 +36,6 @@ class Gestionnaire extends User
         $this->roles = ['ROLE_GESTIONNAIRE'];
         $this->menu = new ArrayCollection();
         $this->burger = new ArrayCollection();
-        $this->complement = new ArrayCollection();
         $this->livraison = new ArrayCollection();
         $this->commande = new ArrayCollection();
     }
@@ -98,36 +94,6 @@ class Gestionnaire extends User
             // set the owning side to null (unless already changed)
             if ($burger->getGestionnaire() === $this) {
                 $burger->setGestionnaire(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Complement>
-     */
-    public function getComplement(): Collection
-    {
-        return $this->complement;
-    }
-
-    public function addComplement(Complement $complement): self
-    {
-        if (!$this->complement->contains($complement)) {
-            $this->complement[] = $complement;
-            $complement->setGestionnaire($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComplement(Complement $complement): self
-    {
-        if ($this->complement->removeElement($complement)) {
-            // set the owning side to null (unless already changed)
-            if ($complement->getGestionnaire() === $this) {
-                $complement->setGestionnaire(null);
             }
         }
 

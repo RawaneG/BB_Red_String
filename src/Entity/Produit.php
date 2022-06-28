@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProduitRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
@@ -14,49 +15,53 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\DiscriminatorMap([
     "menu" => "Menu",
     "burger" => "Burger",
-    "complement" => "Complement"
+    "frites" => "Frites",
+    "boissons" => "Boissons"
 ])]
+#[ApiResource(
+    collectionOperations: ["get", "post"],
+    itemOperations: ["put", "get"]
+)]
 abstract class Produit
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups([
-        "burger:read",
-        "menu:read",
-        "complement:read"
-    ])]
     protected $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
         "burger:read", "burger:write",
-        "menu:read", "menu:write",
-        "complement:read", "complement:write"
+        "frites:read", "frites:write",
+        "boissons:write", "boissons:write",
+        "menu:read", "menu:write"
     ])]
     protected $nom;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
         "burger:read", "burger:write",
-        "menu:read", "menu:write",
-        "complement:read", "complement:write"
+        "frites:read", "frites:write",
+        "boissons:write", "boissons:write",
+        "menu:read", "menu:write"
     ])]
     protected $prix;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
         "burger:read", "burger:write",
-        "menu:read", "menu:write",
-        "complement:read", "complement:write"
+        "frites:read", "frites:write",
+        "boissons:write", "boissons:write",
+        "menu:read", "menu:write"
     ])]
     protected $image;
 
     #[ORM\Column(type: 'boolean')]
     #[Groups([
-        "burger:read", "burger:write",
-        "menu:read", "menu:write",
-        "complement:read", "complement:write"
+        "burger:write",
+        "menu:write",
+        "frites:write",
+        "boissons:write"
     ])]
     protected $isAvailable;
 
