@@ -1,0 +1,33 @@
+1 - "An exception has been thrown during the rendering of a template (\"Parameter \"token\" for route
+\"api_users_patch_collection\" must match \"[^/]++\" (\"\" given) to generate a corresponding URL.\")."
+Réponse =>
+Ça veut dire que les entités filles n'ont pas hérité de la fonction de génération de token dans le constructeur.
+Solution => parent::__construct(). Dans l'entité fille.
+
+2 - Email \"ngomesgmail.com\" does not comply with addr-spec of RFC 2822.
+Réponse =>
+Ça veut dire qu'il y a une erreur de syntaxe dans l'email, car on constate que l'email manque un @.
+Pour éviter celà mieux mieux vaut installer le bundle validator, et l'utiliser sur votre attribut
+d'email.
+Solution => Écrire le nom du bundle => composer require symfony/validator.
+
+3 - Warning: include(/src/Entity/Complement.php): Failed to open stream: No such file or directory in
+(which is being imported from .../"api_platform" type.
+Réponse =>
+Ça veut dire que vous avez probablement supprimé une entité, mais que ses relations avec d'autres
+entités persistent.
+Solution => Enlever tout attribut, get, setter et relations de cette entité partout ou vous le
+trouvez parmi les entités.
+
+4 -No identifier/primary key specified for Entity "App\Entity\Boissons".
+Every Entity must have an identifier/primary key.
+Réponse =>
+Ça veut dire que votre entité ne possède pas de clé primaire.
+Solution =>
+Y mettre :
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private $id;
+
+5 -
