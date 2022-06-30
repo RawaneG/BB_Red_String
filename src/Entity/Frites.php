@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         [
             "method" => "post",
             "security" => "is_granted('ROLE_GESTIONNAIRE')",
-            "securiy_message" => "Vous n'êtes pas autorisé à utiliser ce service",
+            "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
             "normalization_context" => ["groups" => ["frites:read"]],
             "denormalization_context" => ["groups" => ["frites:write"]]
         ]
@@ -33,7 +33,8 @@ class Frites extends Produit
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
-        "frites:read", "frites:write"
+        "frites:read", "frites:write",
+        "menu:read", "menu:write"
     ])]
     private $portions;
 
@@ -42,6 +43,8 @@ class Frites extends Produit
 
     public function __construct()
     {
+        parent::__construct();
+        $this->nom = "Frites";
         $this->menu = new ArrayCollection();
     }
 

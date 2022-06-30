@@ -7,6 +7,7 @@ use App\Repository\BurgerRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BurgerRepository::class)]
 #[ApiResource(
@@ -20,12 +21,28 @@ use Doctrine\Common\Collections\ArrayCollection;
         [
             "method" => "post",
             "security" => "is_granted('ROLE_GESTIONNAIRE')",
-            "securiy_message" => "Vous n'êtes pas autorisé à utiliser ce service",
+            "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
             "normalization_context" => ["groups" => ["burger:read"]],
             "denormalization_context" => ["groups" => ["burger:write"]]
         ]
     ],
-    itemOperations: ["put", "get"]
+    itemOperations: [
+        "put" =>
+        [
+            "method" => "put",
+            "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
+            "normalization_context" => ["groups" => ["burger:read"]],
+            "denormalization_context" => ["groups" => ["burger:write"]]
+        ],
+        "get" =>
+        [
+            "method" => "get",
+            "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
+            "normalization_context" => ["groups" => ["burger:read:all"]]
+        ]
+    ]
 )]
 class Burger extends Produit
 {

@@ -36,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["client:read"])]
+    #[Groups(["client:read", "burger:read:all", "menu:read", "menu:write"])]
     protected $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
@@ -44,12 +44,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         message: 'The email {{ value }} is not a valid email.',
     )]
     #[Groups([
-        "client:read",
-        "client:write",
-        "gestionnaire:read",
-        "gestionnaire:write",
-        "livreur:read",
-        "livreur:write"
+        "client:read", "client:write",
+        "gestionnaire:read", "gestionnaire:write",
+        "livreur:read", "livreur:write",
+        "burger:read:all",
+        "menu:read", "menu:write"
     ])]
     protected $login;
 
@@ -57,7 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([
         "client:read",
         "gestionnaire:read",
-        "livreur:read",
+        "livreur:read"
     ])]
     protected $roles = [];
 

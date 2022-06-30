@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         [
             "method" => "post",
             "security" => "is_granted('ROLE_GESTIONNAIRE')",
-            "securiy_message" => "Vous n'êtes pas autorisé à utiliser ce service",
+            "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
             "normalization_context" => ["groups" => ["boissons:read"]],
             "denormalization_context" => ["groups" => ["boissons:write"]]
         ]
@@ -33,7 +33,8 @@ class Boissons extends Produit
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
-        "boissons:read", "boissons:write"
+        "boissons:read", "boissons:write",
+        "menu:read", "menu:write"
     ])]
     private $typeBoisson;
 
@@ -42,12 +43,14 @@ class Boissons extends Produit
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
-        "boissons:read", "boissons:write"
+        "boissons:read", "boissons:write",
+        "menu:read", "menu:write"
     ])]
     private $taille;
 
     public function __construct()
     {
+        parent::__construct();
         $this->menu = new ArrayCollection();
     }
 

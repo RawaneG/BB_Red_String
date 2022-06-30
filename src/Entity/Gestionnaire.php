@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\GestionnaireRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 
 #[ORM\Entity(repositoryClass: GestionnaireRepository::class)]
 #[ApiResource(
@@ -15,12 +16,6 @@ use ApiPlatform\Core\Annotation\ApiResource;
 )]
 class Gestionnaire extends User
 {
-    #[ORM\OneToMany(mappedBy: 'gestionnaire', targetEntity: Menu::class)]
-    private $menu;
-
-    #[ORM\OneToMany(mappedBy: 'gestionnaire', targetEntity: Burger::class)]
-    private $burger;
-
     #[ORM\ManyToOne(targetEntity: Livreur::class, inversedBy: 'gestionnaires')]
     private $livreur;
 
@@ -30,74 +25,16 @@ class Gestionnaire extends User
     #[ORM\OneToMany(mappedBy: 'gestionnaire', targetEntity: Commande::class)]
     private $commande;
 
+    #[ORM\OneToMany(mappedBy: 'gestionnaire', targetEntity: Produit::class)]
+    private $produits;
+
     public function __construct()
     {
         parent::__construct();
         $this->roles = ['ROLE_GESTIONNAIRE'];
-        $this->menu = new ArrayCollection();
-        $this->burger = new ArrayCollection();
         $this->livraison = new ArrayCollection();
         $this->commande = new ArrayCollection();
-    }
-
-    /**
-     * @return Collection<int, Menu>
-     */
-    public function getMenu(): Collection
-    {
-        return $this->menu;
-    }
-
-    public function addMenu(Menu $menu): self
-    {
-        if (!$this->menu->contains($menu)) {
-            $this->menu[] = $menu;
-            $menu->setGestionnaire($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMenu(Menu $menu): self
-    {
-        if ($this->menu->removeElement($menu)) {
-            // set the owning side to null (unless already changed)
-            if ($menu->getGestionnaire() === $this) {
-                $menu->setGestionnaire(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Burger>
-     */
-    public function getBurger(): Collection
-    {
-        return $this->burger;
-    }
-
-    public function addBurger(Burger $burger): self
-    {
-        if (!$this->burger->contains($burger)) {
-            $this->burger[] = $burger;
-            $burger->setGestionnaire($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBurger(Burger $burger): self
-    {
-        if ($this->burger->removeElement($burger)) {
-            // set the owning side to null (unless already changed)
-            if ($burger->getGestionnaire() === $this) {
-                $burger->setGestionnaire(null);
-            }
-        }
-
-        return $this;
+        $this->produits = new ArrayCollection();
     }
 
     public function getLivreur(): ?Livreur
@@ -166,6 +103,36 @@ class Gestionnaire extends User
             // set the owning side to null (unless already changed)
             if ($commande->getGestionnaire() === $this) {
                 $commande->setGestionnaire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Produit>
+     */
+    public function getProduits(): Collection
+    {
+        return $this->produits;
+    }
+
+    public function addProduit(Produit $produit): self
+    {
+        if (!$this->produits->contains($produit)) {
+            $this->produits[] = $produit;
+            $produit->setGestionnaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduit(Produit $produit): self
+    {
+        if ($this->produits->removeElement($produit)) {
+            // set the owning side to null (unless already changed)
+            if ($produit->getGestionnaire() === $this) {
+                $produit->setGestionnaire(null);
             }
         }
 

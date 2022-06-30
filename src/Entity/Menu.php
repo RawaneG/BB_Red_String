@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\MenuRepository;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: MenuRepository::class)]
 #[ApiResource(
@@ -20,7 +21,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
         [
             "method" => "post",
             "security" => "is_granted('ROLE_GESTIONNAIRE')",
-            "securiy_message" => "Vous n'êtes pas autorisé à utiliser ce service",
+            "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
             "normalization_context" => ["groups" => ["menu:read"]],
             "denormalization_context" => ["groups" => ["menu:write"]]
         ]
@@ -29,16 +30,16 @@ use ApiPlatform\Core\Annotation\ApiResource;
 )]
 class Menu extends Produit
 {
-    #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'menu')]
-    private $gestionnaire;
-
-    #[ORM\ManyToMany(targetEntity: Burger::class, mappedBy: 'menu')]
+    #[ORM\ManyToMany(targetEntity: Burger::class, mappedBy: 'menu', cascade: ['persist'])]
+    #[Groups(["menu:read", "menu:write"])]
     private $burgers;
 
-    #[ORM\ManyToMany(targetEntity: Boissons::class, mappedBy: 'menu')]
+    #[ORM\ManyToMany(targetEntity: Boissons::class, mappedBy: 'menu', cascade: ['persist'])]
+    #[Groups(["menu:read", "menu:write"])]
     private $boissons;
 
-    #[ORM\ManyToMany(targetEntity: Frites::class, mappedBy: 'menu')]
+    #[ORM\ManyToMany(targetEntity: Frites::class, mappedBy: 'menu', cascade: ['persist'])]
+    #[Groups(["menu:read", "menu:write"])]
     private $frites;
 
     public function __construct()
@@ -47,18 +48,6 @@ class Menu extends Produit
         $this->burgers = new ArrayCollection();
         $this->boissons = new ArrayCollection();
         $this->frites = new ArrayCollection();
-    }
-
-    public function getGestionnaire(): ?Gestionnaire
-    {
-        return $this->gestionnaire;
-    }
-
-    public function setGestionnaire(?Gestionnaire $gestionnaire): self
-    {
-        $this->gestionnaire = $gestionnaire;
-
-        return $this;
     }
 
     /**
