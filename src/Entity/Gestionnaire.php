@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\GestionnaireRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 
 #[ORM\Entity(repositoryClass: GestionnaireRepository::class)]
 #[ApiResource(
@@ -16,9 +15,6 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
 )]
 class Gestionnaire extends User
 {
-    #[ORM\ManyToOne(targetEntity: Livreur::class, inversedBy: 'gestionnaires')]
-    private $livreur;
-
     #[ORM\OneToMany(mappedBy: 'gestionnaire', targetEntity: Livraison::class)]
     private $livraison;
 
@@ -28,6 +24,9 @@ class Gestionnaire extends User
     #[ORM\OneToMany(mappedBy: 'gestionnaire', targetEntity: Produit::class)]
     private $produits;
 
+    #[ORM\OneToMany(mappedBy: 'gestionnaire', targetEntity: Livreur::class)]
+    private $livreurs;
+
     public function __construct()
     {
         parent::__construct();
@@ -35,18 +34,7 @@ class Gestionnaire extends User
         $this->livraison = new ArrayCollection();
         $this->commande = new ArrayCollection();
         $this->produits = new ArrayCollection();
-    }
-
-    public function getLivreur(): ?Livreur
-    {
-        return $this->livreur;
-    }
-
-    public function setLivreur(?Livreur $livreur): self
-    {
-        $this->livreur = $livreur;
-
-        return $this;
+        $this->livreurs = new ArrayCollection();
     }
 
     /**
@@ -133,6 +121,36 @@ class Gestionnaire extends User
             // set the owning side to null (unless already changed)
             if ($produit->getGestionnaire() === $this) {
                 $produit->setGestionnaire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Livreur>
+     */
+    public function getLivreurs(): Collection
+    {
+        return $this->livreurs;
+    }
+
+    public function addLivreur(Livreur $livreur): self
+    {
+        if (!$this->livreurs->contains($livreur)) {
+            $this->livreurs[] = $livreur;
+            $livreur->setGestionnaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLivreur(Livreur $livreur): self
+    {
+        if ($this->livreurs->removeElement($livreur)) {
+            // set the owning side to null (unless already changed)
+            if ($livreur->getGestionnaire() === $this) {
+                $livreur->setGestionnaire(null);
             }
         }
 

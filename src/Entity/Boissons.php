@@ -15,43 +15,43 @@ use Symfony\Component\Serializer\Annotation\Groups;
         "get" =>
         [
             "method" => "get",
-            "normalization_context" => ["groups" => ["boissons:read"]]
+            "normalization_context" => ["groups" => ["collection:get_boissons"]]
         ],
         "post" =>
         [
             "method" => "post",
             "security" => "is_granted('ROLE_GESTIONNAIRE')",
             "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
-            "normalization_context" => ["groups" => ["boissons:read"]],
-            "denormalization_context" => ["groups" => ["boissons:write"]]
+            "normalization_context" => ["groups" => ["collection:post_boissons:read"]],
+            "denormalization_context" => ["groups" => ["collection:post_boissons:write"]]
         ]
     ],
-    itemOperations: ["put", "get"]
+    itemOperations: [
+        "put" =>
+        [
+            "method" => "put",
+            "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
+            "normalization_context" => ["groups" => ["item:put_boissons:read"]],
+            "denormalization_context" => ["groups" => ["item:put_boissons:write"]]
+        ],
+        "get" =>
+        [
+            "method" => "get",
+            "normalization_context" => ["groups" => ["item:get_boissons"]]
+        ]
+    ]
 )]
 class Boissons extends Produit
 {
 
-    #[ORM\Column(type: 'string', length: 255)]
-    #[Groups([
-        "boissons:read", "boissons:write",
-        "menu:read", "menu:write"
-    ])]
-    private $typeBoisson;
-
-    #[ORM\ManyToMany(targetEntity: Menu::class, inversedBy: 'boissons')]
-    private $menu;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    #[Groups([
-        "boissons:read", "boissons:write",
-        "menu:read", "menu:write"
-    ])]
-    private $taille;
+    #[ORM\ManyToMany(targetEntity: TailleBoisson::class, mappedBy: 'boissons')]
+    private $tailleBoissons;
 
     public function __construct()
     {
         parent::__construct();
-        $this->menu = new ArrayCollection();
+        $this->tailleBoissons = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -72,37 +72,28 @@ class Boissons extends Produit
     }
 
     /**
-     * @return Collection<int, Menu>
+     * @return Collection<int, TailleBoisson>
      */
-    public function getMenu(): Collection
+    public function getTailleBoissons(): Collection
     {
-        return $this->menu;
+        return $this->tailleBoissons;
     }
 
-    public function addMenu(Menu $menu): self
+    public function addTailleBoisson(TailleBoisson $tailleBoisson): self
     {
-        if (!$this->menu->contains($menu)) {
-            $this->menu[] = $menu;
+        if (!$this->tailleBoissons->contains($tailleBoisson)) {
+            $this->tailleBoissons[] = $tailleBoisson;
+            $tailleBoisson->addBoisson($this);
         }
 
         return $this;
     }
 
-    public function removeMenu(Menu $menu): self
+    public function removeTailleBoisson(TailleBoisson $tailleBoisson): self
     {
-        $this->menu->removeElement($menu);
-
-        return $this;
-    }
-
-    public function getTaille(): ?string
-    {
-        return $this->taille;
-    }
-
-    public function setTaille(string $taille): self
-    {
-        $this->taille = $taille;
+        if ($this->tailleBoissons->removeElement($tailleBoisson)) {
+            $tailleBoisson->removeBoisson($this);
+        }
 
         return $this;
     }

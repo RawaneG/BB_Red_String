@@ -27,51 +27,45 @@ abstract class Produit
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["burger:read", "frites:read", "boissons:read", "menu:read"])]
+    #[Groups(["item:put_burger:read"])]
     protected $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
-        "burger:read", "burger:write",
-        "frites:read", "frites:write",
-        "boissons:write", "boissons:write",
-        "menu:read", "menu:write",
-        "burger:read:all",
-        "user:menu:read"
+        "collection:post_burger:write", "collection:post_burger:read",
+        "collection:get_burger",
+        "item:put_burger:write", "item:put_burger:read", "item:get_burger"
     ])]
     protected $nom;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
-        "burger:read", "burger:write",
-        "frites:read", "frites:write",
-        "boissons:read", "boissons:write",
-        "menu:read", "menu:write",
-        "burger:read:all",
-        "user:menu:read"
+        "collection:post_burger:write", "collection:post_burger:read",
+        "collection:get_burger",
+        "item:put_burger:write", "item:put_burger:read", "item:get_burger"
     ])]
     protected $prix;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
-        "burger:read", "burger:write",
-        "frites:read", "frites:write",
-        "boissons:read", "boissons:write",
-        "menu:read", "menu:write",
-        "burger:read:all",
-        "user:menu:read"
+        "collection:post_burger:write", "collection:post_burger:read",
+        "collection:get_burger",
+        "item:put_burger:write", "item:put_burger:read", "item:get_burger"
     ])]
     protected $image;
 
     #[ORM\Column(type: 'boolean')]
-    #[Groups(["burger:write", "menu:write", "frites:write", "boissons:write", "burger:read:all"])]
+    #[Groups(["item:put_burger:write", "item:put_burger:read", "item:get_burger"])]
     protected $isAvailable;
 
     #[ORM\ManyToMany(targetEntity: Commande::class, inversedBy: 'produits')]
     private $commande;
 
     #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'produits')]
-    #[Groups(["burger:read", "menu:read", "frites:read", "boissons:read", "burger:read:all"])]
+    #[Groups([
+        "collection:post_burger:read", "collection:get_burger",
+        "item:put_burger:read", "item:get_burger"
+    ])]
     private $gestionnaire;
 
     public function __construct()

@@ -36,7 +36,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["client:read", "burger:read:all", "menu:read", "menu:write"])]
+    #[Groups([
+        "client:read", "collection:post_burger:read", "collection:get_burger",
+        "item:put_burger:read", "item:get_burger"
+    ])]
     protected $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
@@ -44,19 +47,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         message: 'The email {{ value }} is not a valid email.',
     )]
     #[Groups([
-        "client:read", "client:write",
-        "gestionnaire:read", "gestionnaire:write",
-        "livreur:read", "livreur:write",
-        "burger:read:all",
-        "menu:read", "menu:write"
+        "client:read", "client:write", "gestionnaire:read", "gestionnaire:write", "livreur:read", "livreur:write",
+        "collection:post_burger:read", "collection:get_burger",
+        "item:put_burger:read", "item:get_burger"
     ])]
     protected $login;
 
     #[ORM\Column(type: 'json')]
     #[Groups([
-        "client:read",
-        "gestionnaire:read",
-        "livreur:read"
+        "client:read", "gestionnaire:read", "livreur:read"
     ])]
     protected $roles = [];
 
@@ -65,31 +64,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[SerializedName("password")]
     #[Groups([
-        "client:write",
-        "gestionnaire:write",
-        "livreur:write"
+        "client:write", "gestionnaire:write", "livreur:write"
     ])]
     private $plainPassword;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
-        "client:read",
-        "client:write",
-        "gestionnaire:read",
-        "gestionnaire:write",
-        "livreur:read",
-        "livreur:write"
+        "client:read", "client:write", "gestionnaire:read", "gestionnaire:write", "livreur:read", "livreur:write",
+        "collection:post_burger:read", "collection:get_burger",
+        "item:put_burger:read", "item:get_burger"
     ])]
     protected $nom;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
-        "client:read",
-        "client:write",
-        "gestionnaire:read",
-        "gestionnaire:write",
-        "livreur:read",
-        "livreur:write"
+        "client:read", "client:write", "gestionnaire:read", "gestionnaire:write", "livreur:read", "livreur:write",
+        "collection:post_burger:read", "collection:get_burger",
+        "item:put_burger:read", "item:get_burger"
     ])]
     protected $prenom;
 

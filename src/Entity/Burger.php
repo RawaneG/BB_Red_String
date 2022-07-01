@@ -7,7 +7,6 @@ use App\Repository\BurgerRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BurgerRepository::class)]
 #[ApiResource(
@@ -15,15 +14,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
         "get" =>
         [
             "method" => "get",
-            "normalization_context" => ["groups" => ["burger:read"]]
+            "normalization_context" => ["groups" => ["collection:get_burger"]]
         ],
         "post" =>
         [
             "method" => "post",
             "security" => "is_granted('ROLE_GESTIONNAIRE')",
             "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
-            "normalization_context" => ["groups" => ["burger:read"]],
-            "denormalization_context" => ["groups" => ["burger:write"]]
+            "normalization_context" => ["groups" => ["collection:post_burger:read"]],
+            "denormalization_context" => ["groups" => ["collection:post_burger:write"]]
         ]
     ],
     itemOperations: [
@@ -32,23 +31,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
             "method" => "put",
             "security" => "is_granted('ROLE_GESTIONNAIRE')",
             "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
-            "normalization_context" => ["groups" => ["burger:read"]],
-            "denormalization_context" => ["groups" => ["burger:write"]]
+            "normalization_context" => ["groups" => ["item:put_burger:read"]],
+            "denormalization_context" => ["groups" => ["item:put_burger:write"]]
         ],
         "get" =>
         [
             "method" => "get",
-            "security" => "is_granted('ROLE_GESTIONNAIRE')",
-            "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
-            "normalization_context" => ["groups" => ["burger:read:all"]]
+            "normalization_context" => ["groups" => ["item:get_burger"]]
         ]
     ]
 )]
 class Burger extends Produit
 {
-    #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'burger')]
-    private $gestionnaire;
-
     #[ORM\ManyToMany(targetEntity: Menu::class, inversedBy: 'burgers')]
     private $menu;
 
@@ -57,18 +51,6 @@ class Burger extends Produit
         parent::__construct();
         $this->menu = new ArrayCollection();
         $this->catalogues = new ArrayCollection();
-    }
-
-    public function getGestionnaire(): ?Gestionnaire
-    {
-        return $this->gestionnaire;
-    }
-
-    public function setGestionnaire(?Gestionnaire $gestionnaire): self
-    {
-        $this->gestionnaire = $gestionnaire;
-
-        return $this;
     }
 
     /**

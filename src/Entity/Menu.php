@@ -15,32 +15,45 @@ use Symfony\Component\Serializer\Annotation\Groups;
         "get" =>
         [
             "method" => "get",
-            "normalization_context" => ["groups" => ["menu:read"]]
+            "normalization_context" => ["groups" => ["collection:get_menu"]]
         ],
         "post" =>
         [
             "method" => "post",
             "security" => "is_granted('ROLE_GESTIONNAIRE')",
             "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
-            "normalization_context" => ["groups" => ["menu:read"]],
-            "denormalization_context" => ["groups" => ["menu:write"]]
+            "normalization_context" => ["groups" => ["collection:post_menu:read"]],
+            "denormalization_context" => ["groups" => ["collection:post_menu:write"]]
         ]
     ],
-    itemOperations: ["put", "get"]
+    itemOperations: [
+        "put" =>
+        [
+            "method" => "put",
+            "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
+            "normalization_context" => ["groups" => ["item:put_menu:read"]],
+            "denormalization_context" => ["groups" => ["item:put_menu:write"]]
+        ],
+        "get" =>
+        [
+            "method" => "get",
+            "normalization_context" => ["groups" => ["item:get_menu"]]
+        ]
+    ]
 )]
 class Menu extends Produit
 {
     #[ORM\ManyToMany(targetEntity: Burger::class, mappedBy: 'menu', cascade: ['persist'])]
-    #[Groups(["menu:read", "menu:write"])]
+    // #[Groups([])]
     private $burgers;
 
-    #[ORM\ManyToMany(targetEntity: Boissons::class, mappedBy: 'menu', cascade: ['persist'])]
-    #[Groups(["menu:read", "menu:write"])]
-    private $boissons;
-
     #[ORM\ManyToMany(targetEntity: Frites::class, mappedBy: 'menu', cascade: ['persist'])]
-    #[Groups(["menu:read", "menu:write"])]
+    // #[Groups([])]
     private $frites;
+
+    #[ORM\ManyToMany(targetEntity: TailleBoisson::class, mappedBy: 'menus', cascade: ['persist'])]
+    private $tailleBoissons;
 
     public function __construct()
     {
@@ -48,6 +61,7 @@ class Menu extends Produit
         $this->burgers = new ArrayCollection();
         $this->boissons = new ArrayCollection();
         $this->frites = new ArrayCollection();
+        $this->tailleBoissons = new ArrayCollection();
     }
 
     /**
@@ -78,33 +92,6 @@ class Menu extends Produit
     }
 
     /**
-     * @return Collection<int, Boissons>
-     */
-    public function getBoissons(): Collection
-    {
-        return $this->boissons;
-    }
-
-    public function addBoisson(Boissons $boisson): self
-    {
-        if (!$this->boissons->contains($boisson)) {
-            $this->boissons[] = $boisson;
-            $boisson->addMenu($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBoisson(Boissons $boisson): self
-    {
-        if ($this->boissons->removeElement($boisson)) {
-            $boisson->removeMenu($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Frites>
      */
     public function getFrites(): Collection
@@ -126,6 +113,33 @@ class Menu extends Produit
     {
         if ($this->frites->removeElement($frite)) {
             $frite->removeMenu($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TailleBoisson>
+     */
+    public function getTailleBoissons(): Collection
+    {
+        return $this->tailleBoissons;
+    }
+
+    public function addTailleBoisson(TailleBoisson $tailleBoisson): self
+    {
+        if (!$this->tailleBoissons->contains($tailleBoisson)) {
+            $this->tailleBoissons[] = $tailleBoisson;
+            $tailleBoisson->addMenu($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTailleBoisson(TailleBoisson $tailleBoisson): self
+    {
+        if ($this->tailleBoissons->removeElement($tailleBoisson)) {
+            $tailleBoisson->removeMenu($this);
         }
 
         return $this;
