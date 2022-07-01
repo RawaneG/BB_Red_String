@@ -46,7 +46,10 @@ class Frites extends Produit
 {
 
     #[ORM\Column(type: 'string', length: 255)]
-    // #[Groups([])]
+    #[Groups([
+        "collection:post_frites:read", "collection:post_frites:write",
+        "item:get_frites", "item:put_frites:read", "item:put_frites:write"
+    ])]
     private $portions;
 
     #[ORM\ManyToMany(targetEntity: Menu::class, inversedBy: 'frites')]

@@ -45,21 +45,21 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Menu extends Produit
 {
     #[ORM\ManyToMany(targetEntity: Burger::class, mappedBy: 'menu', cascade: ['persist'])]
-    // #[Groups([])]
+    #[Groups(["collection:post_menu:write"])]
     private $burgers;
 
     #[ORM\ManyToMany(targetEntity: Frites::class, mappedBy: 'menu', cascade: ['persist'])]
-    // #[Groups([])]
+    #[Groups(["collection:post_menu:write"])]
     private $frites;
 
     #[ORM\ManyToMany(targetEntity: TailleBoisson::class, mappedBy: 'menus', cascade: ['persist'])]
+    #[Groups(["collection:post_menu:write"])]
     private $tailleBoissons;
 
     public function __construct()
     {
         parent::__construct();
         $this->burgers = new ArrayCollection();
-        $this->boissons = new ArrayCollection();
         $this->frites = new ArrayCollection();
         $this->tailleBoissons = new ArrayCollection();
     }

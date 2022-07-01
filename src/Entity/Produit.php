@@ -27,14 +27,24 @@ abstract class Produit
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["item:put_burger:read"])]
+    #[Groups([
+        "item:put_burger:read",
+        "collection:post_menu:write"
+    ])]
     protected $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
         "collection:post_burger:write", "collection:post_burger:read",
         "collection:get_burger",
-        "item:put_burger:write", "item:put_burger:read", "item:get_burger"
+        "item:put_burger:write", "item:put_burger:read", "item:get_burger",
+        "collection:post_frites:read", "collection:post_frites:write",
+        "collection:get_frites",
+        "item:put_frites:write", "item:put_frites:read", "item:get_frites",
+        "collection:post_boissons:read", "collection:post_boissons:write",
+        "collection:get_boissons",
+        "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
+        "collection:post_menu:read", "collection:post_menu:write"
     ])]
     protected $nom;
 
@@ -42,7 +52,14 @@ abstract class Produit
     #[Groups([
         "collection:post_burger:write", "collection:post_burger:read",
         "collection:get_burger",
-        "item:put_burger:write", "item:put_burger:read", "item:get_burger"
+        "item:put_burger:write", "item:put_burger:read", "item:get_burger",
+        "collection:post_frites:read", "collection:post_frites:write",
+        "collection:get_frites",
+        "item:put_frites:write", "item:put_frites:read", "item:get_frites",
+        "collection:post_boissons:read", "collection:post_boissons:write",
+        "collection:get_boissons",
+        "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
+        "collection:post_menu:read", "collection:post_menu:write"
     ])]
     protected $prix;
 
@@ -50,12 +67,23 @@ abstract class Produit
     #[Groups([
         "collection:post_burger:write", "collection:post_burger:read",
         "collection:get_burger",
-        "item:put_burger:write", "item:put_burger:read", "item:get_burger"
+        "item:put_burger:write", "item:put_burger:read", "item:get_burger",
+        "collection:post_frites:read", "collection:post_frites:write",
+        "collection:get_frites",
+        "item:put_frites:write", "item:put_frites:read", "item:get_frites",
+        "collection:post_boissons:read", "collection:post_boissons:write",
+        "collection:get_boissons",
+        "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
+        "collection:post_menu:read", "collection:post_menu:write"
     ])]
     protected $image;
 
     #[ORM\Column(type: 'boolean')]
-    #[Groups(["item:put_burger:write", "item:put_burger:read", "item:get_burger"])]
+    #[Groups([
+        "item:put_burger:write", "item:put_burger:read", "item:get_burger",
+        "item:put_frites:write", "item:put_frites:read", "item:get_frites",
+        "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons"
+    ])]
     protected $isAvailable;
 
     #[ORM\ManyToMany(targetEntity: Commande::class, inversedBy: 'produits')]
@@ -63,8 +91,13 @@ abstract class Produit
 
     #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'produits')]
     #[Groups([
-        "collection:post_burger:read", "collection:get_burger",
-        "item:put_burger:read", "item:get_burger"
+        "collection:post_burger:read",
+        "item:put_burger:read", "item:get_burger",
+        "collection:post_frites:read",
+        "item:put_frites:read", "item:get_frites",
+        "collection:post_boissons:read",
+        "item:put_boissons:read", "item:get_boissons",
+        "collection:post_menu:read"
     ])]
     private $gestionnaire;
 

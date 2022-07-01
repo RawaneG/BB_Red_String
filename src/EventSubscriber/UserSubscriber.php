@@ -41,6 +41,8 @@ class UserSubscriber implements EventSubscriberInterface
     {
         if ($args->getObject() instanceof Produit) {
             $args->getObject()->setGestionnaire($this->getGestionnaire());
+        } else {
+            $args->getObject()->setGestionnaire($this->getGestionnaire());
         }
     }
 }

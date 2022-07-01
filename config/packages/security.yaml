@@ -46,6 +46,7 @@ security:
         - { path: ^/api/menus$, roles: PUBLIC_ACCESS, methods: GET}
         - { path: ^/api/boissons$, roles: PUBLIC_ACCESS, methods: GET}
         - { path: ^/api/frites$, roles: PUBLIC_ACCESS, methods: GET}
+        - { path: ^/api/taille_boissons$, roles: PUBLIC_ACCESS, methods: GET}
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
 

@@ -46,6 +46,11 @@ class Boissons extends Produit
 {
 
     #[ORM\ManyToMany(targetEntity: TailleBoisson::class, mappedBy: 'boissons')]
+    #[Groups([
+        "collection:get_boissons", "collection:post_boissons:read",
+        "collection:post_boissons:write",
+        "item:put_boissons:read", "item:put_boissons:write", "item:get_boissons"
+    ])]
     private $tailleBoissons;
 
     public function __construct()

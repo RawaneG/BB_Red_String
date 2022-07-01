@@ -27,6 +27,9 @@ class Gestionnaire extends User
     #[ORM\OneToMany(mappedBy: 'gestionnaire', targetEntity: Livreur::class)]
     private $livreurs;
 
+    #[ORM\OneToMany(mappedBy: 'gestionnaire', targetEntity: TailleBoisson::class)]
+    private $tailleBoissons;
+
     public function __construct()
     {
         parent::__construct();
@@ -35,6 +38,7 @@ class Gestionnaire extends User
         $this->commande = new ArrayCollection();
         $this->produits = new ArrayCollection();
         $this->livreurs = new ArrayCollection();
+        $this->tailleBoissons = new ArrayCollection();
     }
 
     /**
@@ -151,6 +155,36 @@ class Gestionnaire extends User
             // set the owning side to null (unless already changed)
             if ($livreur->getGestionnaire() === $this) {
                 $livreur->setGestionnaire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TailleBoisson>
+     */
+    public function getTailleBoissons(): Collection
+    {
+        return $this->tailleBoissons;
+    }
+
+    public function addTailleBoisson(TailleBoisson $tailleBoisson): self
+    {
+        if (!$this->tailleBoissons->contains($tailleBoisson)) {
+            $this->tailleBoissons[] = $tailleBoisson;
+            $tailleBoisson->setGestionnaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTailleBoisson(TailleBoisson $tailleBoisson): self
+    {
+        if ($this->tailleBoissons->removeElement($tailleBoisson)) {
+            // set the owning side to null (unless already changed)
+            if ($tailleBoisson->getGestionnaire() === $this) {
+                $tailleBoisson->setGestionnaire(null);
             }
         }
 
