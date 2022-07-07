@@ -6,6 +6,7 @@ use App\Entity\Menu;
 use App\Entity\Produit;
 use App\Entity\Commande;
 use Doctrine\ORM\Events;
+use App\Entity\Livraison;
 use App\Entity\TailleBoisson;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -57,19 +58,24 @@ class UserSubscriber implements EventSubscriberInterface
             $args->getObject()->setGestionnaire($this->getAdmin());
         }
         if ($args->getObject() instanceof Commande) {
-
             $parent = $args->getObject()->getLigneDeCommandes();
             $prix = 0;
-            foreach ($parent as $ldc) {
-
-                $quantite = $ldc->getQuantite();
-                $prixProduit = $ldc->getProduit()->getPrix();
-                $calcul = $quantite * $prixProduit;
-                $prix += $calcul;
-                dd($ldc);
+            foreach ($parent as $value) {
+                $prix += $value->getQuantite() * $value->getProduit()->getPrix();
             }
-            dd($args->getObject()->setPrix());
+            $args->getObject()->setPrix($prix);
             $args->getObject()->setClient($this->getAdmin());
+        }
+        if ($args->getObject() instanceof Livraison) {
+            $prixZone = $args->getObject()->getZone()->getPrixZone();
+            $prixCommandes = 0;
+            $commandes = $args->getObject()->getCommandes();
+            foreach ($commandes as $value) {
+                $prixCommandes += $value->getPrix();
+            }
+            $prixLivraison = $prixCommandes + $prixZone;
+            $args->getObject()->setPrixLivraison($prixLivraison);
+            $args->getObject()->setGestionnaire($this->getAdmin());
         }
     }
 }

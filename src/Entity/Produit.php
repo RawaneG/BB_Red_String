@@ -4,10 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProduitRepository;
-use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
-use Vich\UploaderBundle\Mapping\Annotation\Vich;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
@@ -42,7 +40,7 @@ abstract class Produit
         "collection:post_boissons:read", "collection:post_boissons:write", "collection:get_boissons",
         "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
         "commande:get:collection",
-        "post:write:menu", "post:read:menu"
+        "post:write:menu", "get:menu"
     ])]
     protected $nom;
 
@@ -55,7 +53,7 @@ abstract class Produit
         "collection:post_boissons:read", "collection:post_boissons:write", "collection:get_boissons",
         "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
         "commande:get:collection",
-        "post:read:menu"
+        "post:read:menu", "get:menu"
     ])]
     protected $prix;
 
@@ -71,7 +69,7 @@ abstract class Produit
         "collection:post_boissons:read", "collection:post_boissons:write", "collection:get_boissons",
         "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
         "commande:get:collection",
-        "post:write:menu", "post:read:menu"
+        "post:write:menu", "post:read:menu", "get:menu"
     ])]
     protected $vraiImage;
 

@@ -9,7 +9,6 @@ use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 class ProduitDataPersister implements DataPersisterInterface
 {
     private $_entityManager;
-    private $_passwordEncoder;
 
     public function __construct(EntityManagerInterface $entityManager)
     {

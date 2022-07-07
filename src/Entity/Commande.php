@@ -52,6 +52,7 @@ class Commande
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(["post:livraison:read", "post:livraison:write"])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -71,6 +72,9 @@ class Commande
     #[ORM\Column(type: 'integer')]
     #[Groups(["commande:read:post", "commande:get:collection"])]
     private $prix;
+
+    #[ORM\ManyToOne(targetEntity: Livraison::class, inversedBy: 'commandes')]
+    private $livraison;
 
     public function __construct()
     {
@@ -158,6 +162,18 @@ class Commande
     public function setPrix(int $prix): self
     {
         $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getLivraison(): ?Livraison
+    {
+        return $this->livraison;
+    }
+
+    public function setLivraison(?Livraison $livraison): self
+    {
+        $this->livraison = $livraison;
 
         return $this;
     }

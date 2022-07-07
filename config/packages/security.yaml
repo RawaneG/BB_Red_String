@@ -41,7 +41,6 @@ security:
         - { path: ^/api$, roles: PUBLIC_ACCESS }
         - { path: ^/api/clients$, roles: PUBLIC_ACCESS, methods: POST}
         - { path: ^/api/gestionnaires$, roles: PUBLIC_ACCESS, methods: POST}
-        - { path: ^/api/livreurs$, roles: PUBLIC_ACCESS, methods: POST}
         - { path: ^/api/burgers$, roles: PUBLIC_ACCESS, methods: GET}
         - { path: ^/api/menus, roles: PUBLIC_ACCESS, methods: GET}
         - { path: ^/api/boissons$, roles: PUBLIC_ACCESS, methods: GET}

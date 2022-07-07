@@ -2,12 +2,43 @@
 
 namespace App\Entity;
 
-use App\Repository\LivraisonRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\LivraisonRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: LivraisonRepository::class)]
+#[ApiResource(
+    collectionOperations: [
+        "get" =>
+        [
+            "method" => "get",
+            "normalization_context" => ["groups" => ["collection:livraison"]]
+        ],
+        "post" =>
+        [
+            "method" => "post",
+            "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            "normalization_context" => ["groups" => ["post:livraison:read"]],
+            "denormalization_context" => ["groups" => ["post:livraison:write"]]
+        ]
+    ],
+    itemOperations: [
+        "put" =>
+        [
+            "method" => "put",
+            "normalization_context" => ["groups" => ["put:livraison:read"]],
+            "denormalization_context" => ["groups" => ["put:livraison:write"]]
+        ],
+        "get" =>
+        [
+            "method" => "get",
+            "normalization_context" => ["groups" => ["item:livraison"]]
+        ]
+    ]
+)]
 class Livraison
 {
     #[ORM\Id]
@@ -16,14 +47,28 @@ class Livraison
     private $id;
 
     #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'livraison')]
+    #[Groups(["post:livraison:read"])]
     private $gestionnaire;
 
-    #[ORM\ManyToMany(targetEntity: Zone::class, mappedBy: 'livraison')]
-    private $zones;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    #[Groups(["post:livraison:read"])]
+    private $prix_livraison;
+
+    #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'livraisons')]
+    #[Groups(["post:livraison:read", "post:livraison:write"])]
+    private $zone;
+
+    #[ORM\OneToMany(mappedBy: 'livraison', targetEntity: Commande::class)]
+    #[Groups(["post:livraison:read", "post:livraison:write"])]
+    private $commandes;
+
+    #[ORM\ManyToOne(targetEntity: Livreur::class, inversedBy: 'livraisons')]
+    #[Groups(["post:livraison:read", "post:livraison:write"])]
+    private $livreur;
 
     public function __construct()
     {
-        $this->zones = new ArrayCollection();
+        $this->commandes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -43,29 +88,68 @@ class Livraison
         return $this;
     }
 
-    /**
-     * @return Collection<int, Zone>
-     */
-    public function getZones(): Collection
+    public function getPrixLivraison(): ?int
     {
-        return $this->zones;
+        return $this->prix_livraison;
     }
 
-    public function addZone(Zone $zone): self
+    public function setPrixLivraison(?int $prix_livraison): self
     {
-        if (!$this->zones->contains($zone)) {
-            $this->zones[] = $zone;
-            $zone->addLivraison($this);
+        $this->prix_livraison = $prix_livraison;
+
+        return $this;
+    }
+
+    public function getZone(): ?Zone
+    {
+        return $this->zone;
+    }
+
+    public function setZone(?Zone $zone): self
+    {
+        $this->zone = $zone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commande>
+     */
+    public function getCommandes(): Collection
+    {
+        return $this->commandes;
+    }
+
+    public function addCommande(Commande $commande): self
+    {
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes[] = $commande;
+            $commande->setLivraison($this);
         }
 
         return $this;
     }
 
-    public function removeZone(Zone $zone): self
+    public function removeCommande(Commande $commande): self
     {
-        if ($this->zones->removeElement($zone)) {
-            $zone->removeLivraison($this);
+        if ($this->commandes->removeElement($commande)) {
+            // set the owning side to null (unless already changed)
+            if ($commande->getLivraison() === $this) {
+                $commande->setLivraison(null);
+            }
         }
+
+        return $this;
+    }
+
+    public function getLivreur(): ?Livreur
+    {
+        return $this->livreur;
+    }
+
+    public function setLivreur(?Livreur $livreur): self
+    {
+        $this->livreur = $livreur;
 
         return $this;
     }
