@@ -4,9 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\FritesRepository;
-use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FritesRepository::class)]
@@ -52,14 +50,13 @@ class Frites extends Produit
     ])]
     private $portions;
 
-    #[ORM\ManyToMany(targetEntity: Menu::class, inversedBy: 'frites')]
-    private $menu;
+    #[ORM\OneToOne(mappedBy: 'frite', targetEntity: MenuFrites::class, cascade: ['persist', 'remove'])]
+    private $menuFrites;
 
     public function __construct()
     {
         parent::__construct();
         $this->nom = "Frites";
-        $this->menu = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -79,26 +76,24 @@ class Frites extends Produit
         return $this;
     }
 
-    /**
-     * @return Collection<int, Menu>
-     */
-    public function getMenu(): Collection
+    public function getMenuFrites(): ?MenuFrites
     {
-        return $this->menu;
+        return $this->menuFrites;
     }
 
-    public function addMenu(Menu $menu): self
+    public function setMenuFrites(?MenuFrites $menuFrites): self
     {
-        if (!$this->menu->contains($menu)) {
-            $this->menu[] = $menu;
+        // unset the owning side of the relation if necessary
+        if ($menuFrites === null && $this->menuFrites !== null) {
+            $this->menuFrites->setFrite(null);
         }
 
-        return $this;
-    }
+        // set the owning side of the relation if necessary
+        if ($menuFrites !== null && $menuFrites->getFrite() !== $this) {
+            $menuFrites->setFrite($this);
+        }
 
-    public function removeMenu(Menu $menu): self
-    {
-        $this->menu->removeElement($menu);
+        $this->menuFrites = $menuFrites;
 
         return $this;
     }

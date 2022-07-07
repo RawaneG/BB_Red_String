@@ -43,36 +43,33 @@ use Doctrine\Common\Collections\ArrayCollection;
 )]
 class Burger extends Produit
 {
-    #[ORM\ManyToMany(targetEntity: Menu::class, inversedBy: 'burgers')]
-    private $menu;
+    #[ORM\OneToOne(mappedBy: 'burger', targetEntity: MenuBurgers::class, cascade: ['persist', 'remove'])]
+    private $menuBurgers;
 
     public function __construct()
     {
         parent::__construct();
-        $this->menu = new ArrayCollection();
         $this->catalogues = new ArrayCollection();
     }
 
-    /**
-     * @return Collection<int, Menu>
-     */
-    public function getMenu(): Collection
+    public function getMenuBurgers(): ?MenuBurgers
     {
-        return $this->menu;
+        return $this->menuBurgers;
     }
 
-    public function addMenu(Menu $menu): self
+    public function setMenuBurgers(?MenuBurgers $menuBurgers): self
     {
-        if (!$this->menu->contains($menu)) {
-            $this->menu[] = $menu;
+        // unset the owning side of the relation if necessary
+        if ($menuBurgers === null && $this->menuBurgers !== null) {
+            $this->menuBurgers->setBurger(null);
         }
 
-        return $this;
-    }
+        // set the owning side of the relation if necessary
+        if ($menuBurgers !== null && $menuBurgers->getBurger() !== $this) {
+            $menuBurgers->setBurger($this);
+        }
 
-    public function removeMenu(Menu $menu): self
-    {
-        $this->menu->removeElement($menu);
+        $this->menuBurgers = $menuBurgers;
 
         return $this;
     }

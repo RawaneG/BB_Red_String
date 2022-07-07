@@ -7,8 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\GestionnaireRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity(repositoryClass: GestionnaireRepository::class)]
+#[ORM\Entity(repositoryClass: GestionnaireRepository::class)] 
 #[ApiResource(
     normalizationContext: ["groups" => ["gestionnaire:read"]],
     denormalizationContext: ["groups" => ["gestionnaire:write"]]

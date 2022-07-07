@@ -7,7 +7,9 @@ use App\Repository\ProduitRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Vich\UploaderBundle\Mapping\Annotation\Vich;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
 #[ORM\InheritanceType("JOINED")]
@@ -18,10 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     "frites" => "Frites",
     "boissons" => "Boissons"
 ])]
-#[ApiResource(
-    collectionOperations: ["get", "post"],
-    itemOperations: ["put", "get"]
-)]
+#[ApiResource()]
 abstract class Produit
 {
     #[ORM\Id]
@@ -29,65 +28,60 @@ abstract class Produit
     #[ORM\Column(type: 'integer')]
     #[Groups([
         "item:put_burger:read",
-        "collection:post_menu:write"
+        "commande:write:post", "commande:read:post",
+        "post:write:menu"
     ])]
     protected $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
-        "collection:post_burger:write", "collection:post_burger:read",
-        "collection:get_burger",
+        "collection:post_burger:write", "collection:post_burger:read", "collection:get_burger",
         "item:put_burger:write", "item:put_burger:read", "item:get_burger",
-        "collection:post_frites:read", "collection:post_frites:write",
-        "collection:get_frites",
+        "collection:post_frites:read", "collection:post_frites:write", "collection:get_frites",
         "item:put_frites:write", "item:put_frites:read", "item:get_frites",
-        "collection:post_boissons:read", "collection:post_boissons:write",
-        "collection:get_boissons",
+        "collection:post_boissons:read", "collection:post_boissons:write", "collection:get_boissons",
         "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
-        "collection:post_menu:read", "collection:post_menu:write"
+        "commande:get:collection",
+        "post:write:menu", "post:read:menu"
     ])]
     protected $nom;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
-        "collection:post_burger:write", "collection:post_burger:read",
-        "collection:get_burger",
+        "collection:post_burger:write", "collection:post_burger:read", "collection:get_burger",
         "item:put_burger:write", "item:put_burger:read", "item:get_burger",
-        "collection:post_frites:read", "collection:post_frites:write",
-        "collection:get_frites",
+        "collection:post_frites:read", "collection:post_frites:write", "collection:get_frites",
         "item:put_frites:write", "item:put_frites:read", "item:get_frites",
-        "collection:post_boissons:read", "collection:post_boissons:write",
-        "collection:get_boissons",
+        "collection:post_boissons:read", "collection:post_boissons:write", "collection:get_boissons",
         "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
-        "collection:post_menu:read", "collection:post_menu:write"
+        "commande:get:collection",
+        "post:read:menu"
     ])]
     protected $prix;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    #[Groups([
-        "collection:post_burger:write", "collection:post_burger:read",
-        "collection:get_burger",
-        "item:put_burger:write", "item:put_burger:read", "item:get_burger",
-        "collection:post_frites:read", "collection:post_frites:write",
-        "collection:get_frites",
-        "item:put_frites:write", "item:put_frites:read", "item:get_frites",
-        "collection:post_boissons:read", "collection:post_boissons:write",
-        "collection:get_boissons",
-        "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
-        "collection:post_menu:read", "collection:post_menu:write"
-    ])]
+    #[ORM\Column(type: 'blob')]
     protected $image;
+
+    #[SerializedName('image')]
+    #[Groups([
+        "collection:post_burger:write", "collection:post_burger:read", "collection:get_burger",
+        "item:put_burger:write", "item:put_burger:read", "item:get_burger",
+        "collection:post_frites:read", "collection:post_frites:write", "collection:get_frites",
+        "item:put_frites:write", "item:put_frites:read", "item:get_frites",
+        "collection:post_boissons:read", "collection:post_boissons:write", "collection:get_boissons",
+        "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
+        "commande:get:collection",
+        "post:write:menu", "post:read:menu"
+    ])]
+    protected $vraiImage;
 
     #[ORM\Column(type: 'boolean')]
     #[Groups([
         "item:put_burger:write", "item:put_burger:read", "item:get_burger",
         "item:put_frites:write", "item:put_frites:read", "item:get_frites",
-        "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons"
+        "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
     ])]
     protected $isAvailable;
-
-    #[ORM\ManyToMany(targetEntity: Commande::class, inversedBy: 'produits')]
-    private $commande;
 
     #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'produits')]
     #[Groups([
@@ -97,9 +91,12 @@ abstract class Produit
         "item:put_frites:read", "item:get_frites",
         "collection:post_boissons:read",
         "item:put_boissons:read", "item:get_boissons",
-        "collection:post_menu:read"
+        "post:read:menu"
     ])]
     private $gestionnaire;
+
+    #[ORM\OneToOne(mappedBy: 'produit', targetEntity: LigneDeCommande::class, cascade: ['persist', 'remove'])]
+    private $ligneDeCommande;
 
     public function __construct()
     {
@@ -160,30 +157,6 @@ abstract class Produit
         return $this;
     }
 
-    /**
-     * @return Collection<int, Commande>
-     */
-    public function getCommande(): Collection
-    {
-        return $this->commande;
-    }
-
-    public function addCommande(Commande $commande): self
-    {
-        if (!$this->commande->contains($commande)) {
-            $this->commande[] = $commande;
-        }
-
-        return $this;
-    }
-
-    public function removeCommande(Commande $commande): self
-    {
-        $this->commande->removeElement($commande);
-
-        return $this;
-    }
-
     public function getGestionnaire(): ?Gestionnaire
     {
         return $this->gestionnaire;
@@ -192,6 +165,48 @@ abstract class Produit
     public function setGestionnaire(?Gestionnaire $gestionnaire): self
     {
         $this->gestionnaire = $gestionnaire;
+
+        return $this;
+    }
+
+    public function getLigneDeCommande(): ?LigneDeCommande
+    {
+        return $this->ligneDeCommande;
+    }
+
+    public function setLigneDeCommande(?LigneDeCommande $ligneDeCommande): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($ligneDeCommande === null && $this->ligneDeCommande !== null) {
+            $this->ligneDeCommande->setProduit(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($ligneDeCommande !== null && $ligneDeCommande->getProduit() !== $this) {
+            $ligneDeCommande->setProduit($this);
+        }
+
+        $this->ligneDeCommande = $ligneDeCommande;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of vraiImage
+     */
+    public function getVraiImage()
+    {
+        return $this->vraiImage;
+    }
+
+    /**
+     * Set the value of vraiImage
+     *
+     * @return  self
+     */
+    public function setVraiImage($vraiImage)
+    {
+        $this->vraiImage = $vraiImage;
 
         return $this;
     }

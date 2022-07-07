@@ -38,13 +38,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'integer')]
     #[Groups([
         "client:read",
-        "collection:post_menu:read",
         "collection:post_burger:read", "collection:post_frites:read", "collection:post_boissons:read", "collection:post_taille:read",
-        "item:put_burger:read", "item:get_burger",
-        "item:put_frites:read", "item:get_frites",
-        "item:put_taille:read", "item:get_taille",
-        "item:put_boissons:read", "item:get_boissons",
-        "collection:post_menu:read"
+        "item:put_burger:read", "item:put_frites:read", "item:put_taille:read", "item:put_boissons:read",
+        "commande:write:post"
     ])]
     protected $id;
 
@@ -54,12 +50,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     #[Groups([
         "client:read", "client:write", "gestionnaire:read", "gestionnaire:write", "livreur:read", "livreur:write",
-        "collection:post_burger:read", "collection:post_frites:read", "collection:post_boissons:read", "collection:post_taille:read", "collection:post_menu:read",
-        "item:put_burger:read", "item:get_burger",
-        "item:put_frites:read", "item:get_frites",
-        "item:put_taille:read", "item:get_taille",
-        "item:put_boissons:read", "item:get_boissons",
-        "collection:post_menu:read"
+        "collection:post_burger:read", "collection:post_frites:read", "collection:post_boissons:read", "collection:post_taille:read",
+        "item:put_burger:read", "item:put_frites:read", "item:put_taille:read", "item:put_boissons:read",
+        "commande:read:post", "commande:get:item"
     ])]
     protected $login;
 
@@ -81,24 +74,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
         "client:read", "client:write", "gestionnaire:read", "gestionnaire:write", "livreur:read", "livreur:write",
-        "collection:post_burger:read", "collection:post_frites:read", "collection:post_boissons:read", "collection:post_taille:read", "collection:post_menu:read",
-        "item:put_burger:read", "item:get_burger",
-        "item:put_frites:read", "item:get_frites",
-        "item:put_taille:read", "item:get_taille",
-        "item:put_boissons:read", "item:get_boissons",
-        "collection:post_menu:read"
+        "collection:post_burger:read", "collection:post_frites:read", "collection:post_boissons:read", "collection:post_taille:read",
+        "item:put_burger:read", "item:put_frites:read", "item:put_taille:read", "item:put_boissons:read",
+        "commande:read:post", "commande:get:item"
     ])]
     protected $nom;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
         "client:read", "client:write", "gestionnaire:read", "gestionnaire:write", "livreur:read", "livreur:write",
-        "collection:post_burger:read", "collection:post_frites:read", "collection:post_boissons:read", "collection:post_taille:read", "collection:post_menu:read",
-        "item:put_burger:read", "item:get_burger",
-        "item:put_frites:read", "item:get_frites",
-        "item:put_taille:read", "item:get_taille",
-        "item:put_boissons:read", "item:get_boissons",
-        "collection:post_menu:read"
+        "collection:post_burger:read", "collection:post_frites:read", "collection:post_boissons:read", "collection:post_taille:read",
+        "item:put_burger:read", "item:put_frites:read", "item:put_taille:read", "item:put_boissons:read",
+        "commande:read:post", "commande:get:item"
     ])]
     protected $prenom;
 

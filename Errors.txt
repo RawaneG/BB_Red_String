@@ -52,3 +52,11 @@ renouvelé, ajouté au fait qu'il soit mal placé dans le fichier .env
 
 Solution => Se diriger vers le site mailtrap.io, copier le token de MAILER_DSN et le
 placer dans le fichier env entre les balises "symfony/mailer".
+
+6 - "Update is not allowed for this operation."
+
+Réponse => Ça veut dire dans l'entité que vous voulez ajouter, vous essayez d'effectuer des opérations à
+savoir GET ou POST sur une entité reliée alors que vous ne l'avez pas exposé en tant que ressource Api.
+
+Solution => Mettre #[ApiResource] au dessus de la classe ou les classes ayant une relation avec l'entité sur
+laquelle vous voulez effecter des opérations.

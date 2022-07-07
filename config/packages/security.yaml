@@ -43,10 +43,13 @@ security:
         - { path: ^/api/gestionnaires$, roles: PUBLIC_ACCESS, methods: POST}
         - { path: ^/api/livreurs$, roles: PUBLIC_ACCESS, methods: POST}
         - { path: ^/api/burgers$, roles: PUBLIC_ACCESS, methods: GET}
-        - { path: ^/api/menus$, roles: PUBLIC_ACCESS, methods: GET}
+        - { path: ^/api/menus, roles: PUBLIC_ACCESS, methods: GET}
         - { path: ^/api/boissons$, roles: PUBLIC_ACCESS, methods: GET}
         - { path: ^/api/frites$, roles: PUBLIC_ACCESS, methods: GET}
+        - { path: ^/api/produits$, roles: PUBLIC_ACCESS, methods: GET}
+        - { path: ^/api/catalogues$, roles: PUBLIC_ACCESS, methods: GET}
         - { path: ^/api/taille_boissons$, roles: PUBLIC_ACCESS, methods: GET}
+        - { path: ^/api/ligne_de_commandes$, roles: PUBLIC_ACCESS, methods: GET}
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
 

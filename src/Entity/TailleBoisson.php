@@ -51,7 +51,7 @@ class TailleBoisson
         "collection:get_boissons", "collection:post_boissons:read",
         "collection:post_boissons:write",
         "item:put_boissons:read", "item:put_boissons:write", "item:get_boissons",
-        "collection:post_menu:write", "collection:post_menu:read"
+        "post:write:menu"
     ])]
     private $id;
 
@@ -65,7 +65,7 @@ class TailleBoisson
     #[Groups([
         "collection:get_taille", "collection:post_taille:read",
         "collection:post_taille:write",
-        "item:put_taille:read", "item:put_taille:write", "item:get_taille"
+        "item:put_taille:read", "item:put_taille:write", "item:get_taille",
     ])]
     private $valeurs;
 
@@ -75,6 +75,17 @@ class TailleBoisson
         "item:put_taille:read", "item:get_taille"
     ])]
     private $gestionnaire;
+
+    #[ORM\Column(type: 'integer')]
+    #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'tailleBoissons', cascade: ['persist', 'remove'])]
+    #[Groups([
+        "collection:post_taille:read", "collection:post_taille:write",
+        "item:put_taille:read", "item:get_taille", "item:put_taille:write",
+    ])]
+    private $prix;
+
+    #[ORM\OneToOne(mappedBy: 'tailleBoisson', targetEntity: MenuBoissons::class, cascade: ['persist', 'remove'])]
+    private $menuBoissons;
 
     public function __construct()
     {
@@ -155,6 +166,40 @@ class TailleBoisson
     public function setGestionnaire(?Gestionnaire $gestionnaire): self
     {
         $this->gestionnaire = $gestionnaire;
+
+        return $this;
+    }
+
+    public function getPrix(): ?int
+    {
+        return $this->prix;
+    }
+
+    public function setPrix(int $prix): self
+    {
+        $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getMenuBoissons(): ?MenuBoissons
+    {
+        return $this->menuBoissons;
+    }
+
+    public function setMenuBoissons(?MenuBoissons $menuBoissons): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($menuBoissons === null && $this->menuBoissons !== null) {
+            $this->menuBoissons->setTailleBoisson(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($menuBoissons !== null && $menuBoissons->getTailleBoisson() !== $this) {
+            $menuBoissons->setTailleBoisson($this);
+        }
+
+        $this->menuBoissons = $menuBoissons;
 
         return $this;
     }
