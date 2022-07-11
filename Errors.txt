@@ -16,17 +16,17 @@ d'email.
 
 Solution => Écrire le nom du bundle => composer require symfony/validator.
 
-3 - Warning: include(/src/Entity/Complement.php): Failed to open stream: No such file or directory in
+3 - Warning: include(______________): Failed to open stream: No such file or directory in
 (which is being imported from .../"api_platform" type.
 
 Réponse =>
 Ça veut dire que vous avez probablement supprimé une entité, mais que ses relations avec d'autres
-entités persistent.
+entités sont encore présentes.
 
 Solution => Enlever tout attribut, get, setter et relations de cette entité partout ou vous le
 trouvez parmi les entités.
 
-4 -No identifier/primary key specified for Entity "App\Entity\Boissons".
+4 -No identifier/primary key specified for Entity "_________________".
 Every Entity must have an identifier/primary key.
 
 Réponse =>
@@ -39,7 +39,7 @@ Y mettre :
     #[ORM\Column(type: 'integer')]
     private $id;
 
-5 - "Failed to authenticate on SMTP server with username \"007d45acf6aba4\"
+5 - "Failed to authenticate on SMTP server with username \"_________________\"
 using the following authenticators: \"CRAM-MD5\", \"LOGIN\", \"PLAIN\". Authenticator
 \"CRAM-MD5\" returned \"Expected response code \"235\" but got code \"535\", with message
 \"535 5.7.0 Invalid login or password\".\". Authenticator \"LOGIN\" returned
@@ -60,3 +60,14 @@ savoir GET ou POST sur une entité reliée alors que vous ne l'avez pas exposé 
 
 Solution => Mettre #[ApiResource] au dessus de la classe ou les classes ayant une relation avec l'entité sur
 laquelle vous voulez effecter des opérations.
+
+7 - "Warning: ____ Data truncated for column '____' at row ___"
+
+Réponse => Ça arrive souvent lorsque l'on essaye de changer de type d'attribut après avoir
+déjà introduit des valeurs dans la base de donnée. La base de donnée ne reconnait pas les
+nouvelles données que vous avez rentré avec les nouveaux types.
+
+Solution => Ce qu'il faut donc faire est de soit supprimer les données précédentes avant
+de rentrer ceux avec le nouveau type, si vous avez un problème de clé étrangère après celà
+vous vous dirigez dans la base donnée, vous recherchez les tables dont votre attribut est
+lié par clé étrangère. Ensuite vous mettez la structure de l'attribut en Cascade.
