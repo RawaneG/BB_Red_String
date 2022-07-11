@@ -10,7 +10,6 @@
         "api-platform/core": "^2.6",
         "doctrine/annotations": "^1.13",
         "doctrine/doctrine-bundle": "^2.7",
-        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.12",
         "lexik/jwt-authentication-bundle": "^2.16",
@@ -96,6 +95,7 @@
         }
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "fzaninotto/faker": "^1.5",
         "symfony/maker-bundle": "^1.43"
     }
