@@ -20,13 +20,11 @@ final class Version20220708143319 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE produit CHANGE image image LONGBLOB NOT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE produit CHANGE image image LONGBLOB DEFAULT NULL');
         // $this->addSql('ALTER TABLE produit ADD CONSTRAINT FK_29A5EC276885AC1B FOREIGN KEY (gestionnaire_id) REFERENCES gestionnaire (id) ON UPDATE CASCADE ON DELETE CASCADE');
     }
 }
