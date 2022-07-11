@@ -54,9 +54,9 @@ DirectoryIndex index.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ %{ENV:BASE}/index.php [L]
 
-    # SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
-    # SetEnvIf Content-Type "(.*)" HTTP_CONTENT_TYPE=$1
-    # SetEnvIf Accept "(.*)" HTTP_ACCEPT=$1
+    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+    SetEnvIf Content-Type "(.*)" HTTP_CONTENT_TYPE=$1
+    SetEnvIf Accept "(.*)" HTTP_ACCEPT=$1
 </IfModule>
 
 <IfModule !mod_rewrite.c>
