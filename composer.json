@@ -76,6 +76,9 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "requirements-checker": "script"
         },
+        "compile": [
+            "php bin/console doctrine:migrations:migrate"
+        ],
         "post-install-cmd": [
             "@auto-scripts",
             "php bin/console doctrine:schema:update --force",
