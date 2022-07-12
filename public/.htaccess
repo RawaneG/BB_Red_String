@@ -18,12 +18,11 @@ DirectoryIndex index.php
 </IfModule>
 
 <IfModule mod_rewrite.c>
+    RewriteEngine On
 
     SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
     SetEnvIf Content-Type "(.*)" HTTP_CONTENT_TYPE=$1
     SetEnvIf Accept "(.*)" HTTP_ACCEPT=$1
-
-    RewriteEngine On
 
     # Determine the RewriteBase automatically and set it as environment variable.
     # If you are using Apache aliases to do mass virtual hosting or installed the
@@ -58,7 +57,6 @@ DirectoryIndex index.php
     # Rewrite all other queries to the front controller.
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ %{ENV:BASE}/index.php [L]
-
 </IfModule>
 
 <IfModule !mod_rewrite.c>
