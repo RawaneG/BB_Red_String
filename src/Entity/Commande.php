@@ -73,7 +73,7 @@ class Commande
     #[Groups(["commande:read:post", "commande:get:collection"])]
     private $prix;
 
-    #[ORM\ManyToOne(targetEntity: Livraison::class, inversedBy: 'commandes')]
+    #[ORM\ManyToOne(targetEntity: Livraison::class, inversedBy: 'commandes', cascade: ['persist'])]
     private $livraison;
 
     public function __construct()

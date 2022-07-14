@@ -87,6 +87,9 @@ class TailleBoisson
     #[ORM\OneToOne(mappedBy: 'tailleBoisson', targetEntity: MenuBoissons::class, cascade: ['persist', 'remove'])]
     private $menuBoissons;
 
+    #[ORM\OneToOne(mappedBy: 'tailleBoisson', targetEntity: LigneBoisson::class, cascade: ['persist', 'remove'])]
+    private $ligneBoisson;
+
     public function __construct()
     {
         $this->boissons = new ArrayCollection();
@@ -200,6 +203,28 @@ class TailleBoisson
         }
 
         $this->menuBoissons = $menuBoissons;
+
+        return $this;
+    }
+
+    public function getLigneBoisson(): ?LigneBoisson
+    {
+        return $this->ligneBoisson;
+    }
+
+    public function setLigneBoisson(?LigneBoisson $ligneBoisson): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($ligneBoisson === null && $this->ligneBoisson !== null) {
+            $this->ligneBoisson->setTailleBoisson(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($ligneBoisson !== null && $ligneBoisson->getTailleBoisson() !== $this) {
+            $ligneBoisson->setTailleBoisson($this);
+        }
+
+        $this->ligneBoisson = $ligneBoisson;
 
         return $this;
     }

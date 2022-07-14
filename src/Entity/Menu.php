@@ -49,12 +49,16 @@ class Menu extends Produit
     #[Groups(["post:write:menu"])]
     private $menuBoissons;
 
+    #[ORM\OneToMany(mappedBy: 'menu', targetEntity: LigneBoisson::class)]
+    private $ligneBoissons;
+
     public function __construct()
     {
         parent::__construct();
         $this->menuFrites = new ArrayCollection();
         $this->menuBurgers = new ArrayCollection();
         $this->menuBoissons = new ArrayCollection();
+        $this->ligneBoissons = new ArrayCollection();
     }
 
     /**
@@ -141,6 +145,36 @@ class Menu extends Produit
             // set the owning side to null (unless already changed)
             if ($menuBoisson->getMenu() === $this) {
                 $menuBoisson->setMenu(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LigneBoisson>
+     */
+    public function getLigneBoissons(): Collection
+    {
+        return $this->ligneBoissons;
+    }
+
+    public function addLigneBoisson(LigneBoisson $ligneBoisson): self
+    {
+        if (!$this->ligneBoissons->contains($ligneBoisson)) {
+            $this->ligneBoissons[] = $ligneBoisson;
+            $ligneBoisson->setMenu($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLigneBoisson(LigneBoisson $ligneBoisson): self
+    {
+        if ($this->ligneBoissons->removeElement($ligneBoisson)) {
+            // set the owning side to null (unless already changed)
+            if ($ligneBoisson->getMenu() === $this) {
+                $ligneBoisson->setMenu(null);
             }
         }
 

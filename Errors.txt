@@ -71,3 +71,13 @@ Solution => Ce qu'il faut donc faire est de soit supprimer les données précéd
 de rentrer ceux avec le nouveau type, si vous avez un problème de clé étrangère après celà
 vous vous dirigez dans la base donnée, vous recherchez les tables dont votre attribut est
 lié par clé étrangère. Ensuite vous mettez la structure de l'attribut en Cascade.
+
+
+8 - the controller for uri \"/api/my uri\" is not callable: controller \"MonController\"
+does neither exist as service nor as class.",
+
+Réponse => Ça veut dire que vous n'avez pas importé le controlleur que vous avez spécifié dans une de vos
+opérations sur votre entité. Ou tout simplement vous avez écrit le nom du controlleur dans un mauvais format.
+Car ce dernier ne doit pas posséder de chaines de caractère.
+
+Solution => "controller" => MonController::class au lieu de "controller" => "MonController::class"
