@@ -17,14 +17,14 @@ class MenuBoissons
     private $id;
 
     #[ORM\Column(type: 'integer')]
-    #[Groups(["post:write:menu", "post:read:menu"])]
+    #[Groups(["post:write:menu", "post:read:menu", "get:menu"])]
     private $quantite;
 
     #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'menuBoissons')]
     private $menu;
 
-    #[ORM\OneToOne(inversedBy: 'menuBoissons', targetEntity: TailleBoisson::class, cascade: ['persist', 'remove'])]
-    #[Groups(["post:write:menu", "post:read:menu"])]
+    #[ORM\ManyToOne(inversedBy: 'menuBoissons', targetEntity: TailleBoisson::class, cascade: ['persist', 'remove'])]
+    #[Groups(["post:write:menu", "post:read:menu", "get:menu"])]
     private $tailleBoisson;
 
     public function __construct()

@@ -26,7 +26,7 @@ class Client extends User
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
         "client:read", "client:write",
-        "commande:read:post", "commande:get:item"
+        "commande:read:post", "commande:get:collection"
     ])]
     private $telephone;
 

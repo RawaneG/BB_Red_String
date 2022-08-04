@@ -15,6 +15,7 @@ class LigneDeCommande
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(["commande:write:post", "commande:read:post"])]
     private $id;
 
     #[ORM\Column(type: 'integer')]

@@ -3,11 +3,13 @@
 namespace App\DataPersister;
 
 use App\Entity\Produit;
+use App\Entity\Commande;
 use App\Entity\Livraison;
-use Doctrine\ORM\EntityManagerInterface;
-use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use App\Repository\ZoneRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use ApiPlatform\Core\DataPersister\DataPersisterInterface;
+use DateTime;
 
 class ProduitDataPersister implements DataPersisterInterface
 {
@@ -45,8 +47,9 @@ class ProduitDataPersister implements DataPersisterInterface
             }
         } else if ($data instanceof Produit) {
             if ($data->getVraiImage()) {
-                $image = $data->getVraiImage();
-                $image_converti = $data->setImage(file_get_contents($image));
+                $data->setImage(($data->getVraiImage()));
+            } else {
+                dd("Vous n'avez pas récupéré l'image");
             }
         }
         $this->_entityManager->persist($data);

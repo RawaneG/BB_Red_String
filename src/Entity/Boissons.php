@@ -46,12 +46,21 @@ class Boissons extends Produit
 {
 
     #[ORM\ManyToMany(targetEntity: TailleBoisson::class, mappedBy: 'boissons')]
-    #[Groups([
-        "collection:get_boissons", "collection:post_boissons:read",
-        "collection:post_boissons:write",
-        "item:put_boissons:read", "item:put_boissons:write", "item:get_boissons"
-    ])]
     private $tailleBoissons;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(
+        "collection:post_taille:write",
+        "collection:get_taille",
+        "collection:post_taille:read",
+        "post:write:menu",
+        "post:read:menu",
+        "get:menu",
+        "collection:get_boissons",
+        "collection:post_boissons:read",
+        "collection:post_boissons:write"
+    )]
+    private ?int $quantite = 0;
 
     public function __construct()
     {
@@ -99,6 +108,18 @@ class Boissons extends Produit
         if ($this->tailleBoissons->removeElement($tailleBoisson)) {
             $tailleBoisson->removeBoisson($this);
         }
+
+        return $this;
+    }
+
+    public function getQuantite(): ?int
+    {
+        return $this->quantite;
+    }
+
+    public function setQuantite(?int $quantite): self
+    {
+        $this->quantite = $quantite;
 
         return $this;
     }

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TailleBoissonRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -51,11 +52,14 @@ class TailleBoisson
         "collection:get_boissons", "collection:post_boissons:read",
         "collection:post_boissons:write",
         "item:put_boissons:read", "item:put_boissons:write", "item:get_boissons",
-        "post:write:menu"
+        "post:write:menu", "get:menu"
     ])]
     private $id;
 
     #[ORM\ManyToMany(targetEntity: Boissons::class, inversedBy: 'tailleBoissons', cascade: ["persist"])]
+    #[Groups([
+        "collection:post_taille:write", "collection:get_taille", "get:menu"
+    ])]
     private $boissons;
 
     #[ORM\ManyToMany(targetEntity: Menu::class, inversedBy: 'tailleBoissons')]
@@ -64,7 +68,7 @@ class TailleBoisson
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
         "collection:get_taille", "collection:post_taille:read",
-        "collection:post_taille:write",
+        "collection:post_taille:write", "get:menu",
         "item:put_taille:read", "item:put_taille:write", "item:get_taille",
     ])]
     private $valeurs;
@@ -86,9 +90,6 @@ class TailleBoisson
 
     #[ORM\OneToOne(mappedBy: 'tailleBoisson', targetEntity: MenuBoissons::class, cascade: ['persist', 'remove'])]
     private $menuBoissons;
-
-    #[ORM\OneToOne(mappedBy: 'tailleBoisson', targetEntity: LigneBoisson::class, cascade: ['persist', 'remove'])]
-    private $ligneBoisson;
 
     public function __construct()
     {
@@ -203,28 +204,6 @@ class TailleBoisson
         }
 
         $this->menuBoissons = $menuBoissons;
-
-        return $this;
-    }
-
-    public function getLigneBoisson(): ?LigneBoisson
-    {
-        return $this->ligneBoisson;
-    }
-
-    public function setLigneBoisson(?LigneBoisson $ligneBoisson): self
-    {
-        // unset the owning side of the relation if necessary
-        if ($ligneBoisson === null && $this->ligneBoisson !== null) {
-            $this->ligneBoisson->setTailleBoisson(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($ligneBoisson !== null && $ligneBoisson->getTailleBoisson() !== $this) {
-            $ligneBoisson->setTailleBoisson($this);
-        }
-
-        $this->ligneBoisson = $ligneBoisson;
 
         return $this;
     }

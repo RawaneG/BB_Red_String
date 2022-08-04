@@ -18,14 +18,14 @@ class MenuBurgers
     private $id;
 
     #[ORM\Column(type: 'integer')]
-    #[Groups(["post:write:menu", "post:read:menu"])]
+    #[Groups(["post:write:menu", "post:read:menu", "get:menu"])]
     private $quantite;
 
     #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'menuBurgers')]
     private $menu;
 
     #[ORM\OneToOne(inversedBy: 'menuBurgers', targetEntity: Burger::class, cascade: ['persist', 'remove'])]
-    #[Groups(["post:write:menu", "post:read:menu"])]
+    #[Groups(["post:write:menu", "post:read:menu", "get:menu"])]
     private $burger;
 
     public function __construct()

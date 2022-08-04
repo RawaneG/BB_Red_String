@@ -40,7 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         "client:read",
         "collection:post_burger:read", "collection:post_frites:read", "collection:post_boissons:read", "collection:post_taille:read",
         "item:put_burger:read", "item:put_frites:read", "item:put_taille:read", "item:put_boissons:read",
-        "commande:write:post",
+        "commande:write:post", "commande:read:post", "commande:get:collection",
         "post:livraison:read", "post:livraison:write"
     ])]
     protected $id;

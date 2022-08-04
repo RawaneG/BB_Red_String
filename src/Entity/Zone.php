@@ -37,24 +37,28 @@ class Zone
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["post:livraison:write"])]
+    #[Groups(["post:livraison:write", "commande:get:collection", "commande:read:post", "commande:write:post"])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    #[Groups(["read:zone", "write:zone"])]
+    #[Groups(["read:zone", "write:zone", "collection:zone", "commande:get:collection", "commande:read:post", "commande:read:write"])]
     private $nom;
 
     #[ORM\Column(type: 'float', nullable: true)]
-    #[Groups(["read:zone", "write:zone"])]
+    #[Groups(["read:zone", "write:zone", "collection:zone", "commande:get:collection", "commande:read:post", "commande:read:write"])]
     private $prix_zone;
 
     #[ORM\OneToMany(mappedBy: 'zone', targetEntity: Livraison::class)]
     private $livraisons;
 
+    #[ORM\OneToMany(mappedBy: 'zone', targetEntity: Commande::class)]
+    private Collection $commandes;
+
     public function __construct()
     {
         $this->livraisons = new ArrayCollection();
         $this->prix_zone = 2500;
+        $this->commandes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -110,6 +114,36 @@ class Zone
             // set the owning side to null (unless already changed)
             if ($livraison->getZone() === $this) {
                 $livraison->setZone(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commande>
+     */
+    public function getCommandes(): Collection
+    {
+        return $this->commandes;
+    }
+
+    public function addCommande(Commande $commande): self
+    {
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes->add($commande);
+            $commande->setZone($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommande(Commande $commande): self
+    {
+        if ($this->commandes->removeElement($commande)) {
+            // set the owning side to null (unless already changed)
+            if ($commande->getZone() === $this) {
+                $commande->setZone(null);
             }
         }
 

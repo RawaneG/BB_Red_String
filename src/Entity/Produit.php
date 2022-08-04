@@ -25,35 +25,50 @@ abstract class Produit
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     #[Groups([
+        // -- Normalisation et Denormalisation Taille Boisson
+        "collection:post_taille:read", "collection:post_taille:write", "collection:get_taille", "item:put_taille:read", "item:get_taille", "item:put_taille:write",
+        // -- Normalisation et Denormalisation Burger
         "item:put_burger:read",
+        // -- Normalisation et Denormalisation Commande
         "commande:write:post", "commande:read:post",
-        "post:write:menu"
+        // -- Normalisation Commande
+        "collection:catalogue",
+        // -- Normalisation Burger
+        "collection:get_burger",
+        // -- Normalisation et Denormalisation Menu
+        "get:menu", "post:write:menu",
+        // -- Normalisation et Denormalisation Boissons
+        "collection:get_boissons", "collection:post_boissons:read", "collection:post_boissons:write", "item:put_boissons:read", "item:put_boissons:write", "item:get_boissons"
     ])]
     protected $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
-        "collection:post_burger:write", "collection:post_burger:read", "collection:get_burger",
-        "item:put_burger:write", "item:put_burger:read", "item:get_burger",
-        "collection:post_frites:read", "collection:post_frites:write", "collection:get_frites",
-        "item:put_frites:write", "item:put_frites:read", "item:get_frites",
-        "collection:post_boissons:read", "collection:post_boissons:write", "collection:get_boissons",
-        "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
+        // -- Normalisation et Denormalisation Burger
+        "collection:post_burger:write", "collection:post_burger:read", "collection:get_burger", "item:put_burger:write", "item:put_burger:read", "item:get_burger",
+        // -- Normalisation et Denormalisation Frites
+        "collection:post_frites:read", "collection:post_frites:write", "collection:get_frites", "item:put_frites:write", "item:put_frites:read", "item:get_frites",
+        // -- Normalisation et Denormalisation Boissons
+        "collection:post_boissons:read", "collection:post_boissons:write", "collection:get_boissons", "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
+        // -- Normalisation Commandes
         "commande:get:collection",
-        "post:write:menu", "get:menu"
+        // -- Normalisation et Denormalisation Menu
+        "post:write:menu", "get:menu", "collection:catalogue", "item:put_burger:write"
     ])]
     protected $nom;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
-        "collection:post_burger:write", "collection:post_burger:read", "collection:get_burger",
-        "item:put_burger:write", "item:put_burger:read", "item:get_burger",
-        "collection:post_frites:read", "collection:post_frites:write", "collection:get_frites",
-        "item:put_frites:write", "item:put_frites:read", "item:get_frites",
-        "collection:post_boissons:read", "collection:post_boissons:write", "collection:get_boissons",
-        "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
+        // -- Normalisation et Denormalisation Burger
+        "collection:post_burger:write", "collection:post_burger:read", "collection:get_burger", "item:put_burger:write", "item:put_burger:read", "item:get_burger",
+        // -- Normalisation et Denormalisation Frites
+        "collection:post_frites:read", "collection:post_frites:write", "collection:get_frites", "item:put_frites:write", "item:put_frites:read", "item:get_frites",
+        // -- Normalisation et Denormalisation Boissons
+        "collection:post_boissons:read", "collection:post_boissons:write", "collection:get_boissons", "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
+        // -- Normalisation et Denormalisation Commande
         "commande:get:collection",
-        "post:read:menu", "get:menu"
+        // -- Normalisation et Denormalisation Menu
+        "post:read:menu", "get:menu", "collection:catalogue", "get:menu"
     ])]
     protected $prix;
 
@@ -62,14 +77,20 @@ abstract class Produit
 
     #[SerializedName('image')]
     #[Groups([
-        "collection:post_burger:write", "collection:post_burger:read", "collection:get_burger",
-        "item:put_burger:write", "item:put_burger:read", "item:get_burger",
-        "collection:post_frites:read", "collection:post_frites:write", "collection:get_frites",
-        "item:put_frites:write", "item:put_frites:read", "item:get_frites",
-        "collection:post_boissons:read", "collection:post_boissons:write", "collection:get_boissons",
-        "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
+        // -- Normalisation et Denormalisation Burger
+        "collection:post_burger:write", "collection:post_burger:read", "collection:get_burger", "item:put_burger:write", "item:put_burger:read", "item:get_burger",
+        // -- Normalisation et Denormalisation Frites
+        "collection:post_frites:read", "collection:post_frites:write", "collection:get_frites", "item:put_frites:write", "item:put_frites:read", "item:get_frites",
+        // -- Normalisation et Denormalisation Boissons
+        "collection:post_boissons:read", "collection:post_boissons:write", "collection:get_boissons", "item:put_boissons:write", "item:put_boissons:read", "item:get_boissons",
+        // -- Normalisation Commande
         "commande:get:collection",
-        "post:write:menu", "post:read:menu", "get:menu"
+        // -- Normalisation et Denormalisation Menu
+        "post:write:menu", "post:read:menu", "get:menu",
+        // -- Normalisation et Denormalisation Catalogue
+        "collection:catalogue",
+        // -- Normalisation et Denormalisation Taille Boisson
+        "collection:post_taille:write", "collection:get_taille"
     ])]
     protected $vraiImage;
 
@@ -194,7 +215,8 @@ abstract class Produit
      */
     public function getVraiImage()
     {
-        return $this->vraiImage;
+        return is_resource($this->image) ? utf8_encode(base64_encode(stream_get_contents($this->image))) : $this->vraiImage;
+        // return $this->vraiImage;
     }
 
     /**

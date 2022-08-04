@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\MenuRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
@@ -36,21 +37,21 @@ class Menu extends Produit
 {
     #[ORM\OneToMany(mappedBy: 'menu', targetEntity: MenuFrites::class, cascade: ['persist'])]
     #[SerializedName("Frites")]
-    #[Groups(["post:write:menu"])]
+    #[Groups(["post:write:menu", "get:menu"])]
     private $menuFrites;
 
     #[ORM\OneToMany(mappedBy: 'menu', targetEntity: MenuBurgers::class, cascade: ['persist'])]
     #[SerializedName("Burgers")]
-    #[Groups(["post:write:menu"])]
+    #[Groups(["post:write:menu", "get:menu"])]
     private $menuBurgers;
 
     #[ORM\OneToMany(mappedBy: 'menu', targetEntity: MenuBoissons::class, cascade: ['persist'])]
     #[SerializedName("Boissons")]
-    #[Groups(["post:write:menu"])]
+    #[Groups(["post:write:menu", "get:menu"])]
     private $menuBoissons;
 
-    #[ORM\OneToMany(mappedBy: 'menu', targetEntity: LigneBoisson::class)]
-    private $ligneBoissons;
+    // #[ORM\OneToMany(mappedBy: 'menu', targetEntity: LigneBoisson::class)]
+    // private $ligneBoissons;
 
     public function __construct()
     {
@@ -58,7 +59,7 @@ class Menu extends Produit
         $this->menuFrites = new ArrayCollection();
         $this->menuBurgers = new ArrayCollection();
         $this->menuBoissons = new ArrayCollection();
-        $this->ligneBoissons = new ArrayCollection();
+        // $this->ligneBoissons = new ArrayCollection();
     }
 
     /**
@@ -151,33 +152,33 @@ class Menu extends Produit
         return $this;
     }
 
-    /**
-     * @return Collection<int, LigneBoisson>
-     */
-    public function getLigneBoissons(): Collection
-    {
-        return $this->ligneBoissons;
-    }
+    // /**
+    //  * @return Collection<int, LigneBoisson>
+    //  */
+    // public function getLigneBoissons(): Collection
+    // {
+    //     return $this->ligneBoissons;
+    // }
 
-    public function addLigneBoisson(LigneBoisson $ligneBoisson): self
-    {
-        if (!$this->ligneBoissons->contains($ligneBoisson)) {
-            $this->ligneBoissons[] = $ligneBoisson;
-            $ligneBoisson->setMenu($this);
-        }
+    // public function addLigneBoisson(LigneBoisson $ligneBoisson): self
+    // {
+    //     if (!$this->ligneBoissons->contains($ligneBoisson)) {
+    //         $this->ligneBoissons[] = $ligneBoisson;
+    //         $ligneBoisson->setMenu($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeLigneBoisson(LigneBoisson $ligneBoisson): self
-    {
-        if ($this->ligneBoissons->removeElement($ligneBoisson)) {
-            // set the owning side to null (unless already changed)
-            if ($ligneBoisson->getMenu() === $this) {
-                $ligneBoisson->setMenu(null);
-            }
-        }
+    // public function removeLigneBoisson(LigneBoisson $ligneBoisson): self
+    // {
+    //     if ($this->ligneBoissons->removeElement($ligneBoisson)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($ligneBoisson->getMenu() === $this) {
+    //             $ligneBoisson->setMenu(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }
