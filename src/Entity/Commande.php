@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CommandeRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
@@ -35,14 +34,14 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
         [
             "method" => "get",
             // "security" => "is_granted('ROLE_CLIENT')",
-            "security_message" => "Veuillez vous connecter d'abord",
+            // "security_message" => "Veuillez vous connecter d'abord",
             "normalization_context" => ["groups" => ["commande:get:item"]]
         ],
         "put" =>
         [
             "method" => "put",
             // "security" => "is_granted('ROLE_GESTIONNAIRE')",
-            "security_message" => "Vous n'avez aucun droit pour accéder à cette ressource",
+            // "security_message" => "Vous n'avez aucun droit pour accéder à cette ressource",
             "normalization_context" => ["groups" => ["commande:read:put"]],
             "denormalization_context" => ["groups" => ["commande:write:put"]]
         ]
@@ -58,7 +57,7 @@ class Commande
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(["commande:get:collection"])]
+    #[Groups(["commande:get:collection", "commande:read:put", "commande:write:put", "commande:get:item"])]
     private $etat;
 
     #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'commande')]

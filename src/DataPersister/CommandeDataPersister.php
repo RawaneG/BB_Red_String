@@ -3,6 +3,7 @@
 namespace App\DataPersister;
 
 use DateTime;
+use DateTimeInterface;
 use App\Entity\Commande;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraints\Date;
@@ -28,7 +29,7 @@ class CommandeDataPersister implements ContextAwareDataPersisterInterface
             $prix = $value->getProduit()->getPrix();
             $value->setPrix($prix);
             $this->manager->persist($value);
-            $maDate = $data->setDate(new Date());
+            $maDate = $data->setDate(new DateTime(date("y-m-d")));
             $this->manager->persist($maDate);
         }
         $this->manager->flush();
