@@ -1,4 +1,6 @@
 api_platform:
+  defaults:
+    pagination_enabled: false
   eager_loading:
     force_eager: false
   mapping:

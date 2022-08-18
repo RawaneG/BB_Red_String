@@ -43,6 +43,10 @@ security:
     - { path: ^/api/commandes$, roles: PUBLIC_ACCESS, methods: POST }
     - { path: ^/api/commandes$, roles: PUBLIC_ACCESS, methods: GET }
     - { path: ^/api/commandes/, roles: PUBLIC_ACCESS, methods: PUT }
+    - { path: ^/api/livraisons$, roles: PUBLIC_ACCESS, methods: GET }
+    - { path: ^/api/livraisons$, roles: PUBLIC_ACCESS, methods: POST }
+    - { path: ^/api/livreurs$, roles: PUBLIC_ACCESS, methods: POST }
+    - { path: ^/api/livreurs$, roles: PUBLIC_ACCESS, methods: GET }
     - { path: ^/api/gestionnaires$, roles: PUBLIC_ACCESS, methods: POST }
     - { path: ^/api/burgers$, roles: PUBLIC_ACCESS, methods: GET }
     - { path: ^/api/menus, roles: PUBLIC_ACCESS, methods: GET }
@@ -53,7 +57,8 @@ security:
     - { path: ^/api/taille_boissons$, roles: PUBLIC_ACCESS, methods: GET }
     - { path: ^/api/ligne_de_commandes$, roles: PUBLIC_ACCESS, methods: GET }
     - { path: ^/api/zones$, roles: PUBLIC_ACCESS, methods: GET }
-    - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/zones$, roles: PUBLIC_ACCESS, methods: POST }
+    # - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
   security:

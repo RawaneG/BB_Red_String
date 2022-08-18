@@ -25,6 +25,7 @@ abstract class Produit
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     #[Groups([
+
         // -- Normalisation et Denormalisation Taille Boisson
         "collection:post_taille:read", "collection:post_taille:write", "collection:get_taille", "item:put_taille:read", "item:get_taille", "item:put_taille:write",
         // -- Normalisation et Denormalisation Burger
@@ -215,7 +216,7 @@ abstract class Produit
      */
     public function getVraiImage()
     {
-        return is_resource($this->image) ? utf8_encode(base64_encode(stream_get_contents($this->image))) : $this->vraiImage;
+        return is_resource($this->image) ? base64_encode(stream_get_contents($this->image)) : $this->vraiImage;
         // return $this->vraiImage;
     }
 

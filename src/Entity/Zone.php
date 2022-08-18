@@ -12,24 +12,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: ZoneRepository::class)]
 #[ApiResource(
     collectionOperations: [
-        "get" =>
-        [
-            "method" => "get",
-            "normalization_context" => ["groups" => ["collection:zone"]]
+        "get" => [
+            "normalization_context" => ["groups" => ["collection:get:zone"]]
         ],
-        "post" =>
-        [
-            "method" => "post",
-            "normalization_context" => ["groups" => ["read:zone"]],
-            "denormalization_context" => ["groups" => ["write:zone"]]
+        "post" => [
+            "normalization_context" => ["groups" => ["post:read:zone"]],
+            "denormalization_context" => ["groups" => ["post:write:zone"]]
         ]
     ],
     itemOperations: [
-        'get' =>
-        [
-            "method" => "get",
-            "normalization_context" => ["groups" => ["item:zone"]]
-        ]
+        "get" => [
+            "normalization_context" => ["groups" => ["item:get:zone"]]
+        ],
     ]
 )]
 class Zone
@@ -37,21 +31,42 @@ class Zone
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["read:zone", "write:zone", "collection:zone", "post:livraison:write", "commande:get:collection", "commande:read:post", "commande:write:post"])]
+    #[Groups([
+        // -- Normalisation et Denormalisation Zone
+        "collection:get:zone", "post:read:zone",
+        // -- Normalisation et Denormalisation Livraison
+        "collection:livraison", "post:livraison:write",
+        // -- Normalisation et Denormalisation Commande
+        "commande:get:collection", "commande:read:post", "commande:write:post"
+    ])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    #[Groups(["read:zone", "write:zone", "collection:zone", "commande:get:collection", "commande:read:post", "commande:read:write"])]
+    #[Groups([
+        // -- Normalisation et Denormalisation Zone
+        "collection:get:zone", "post:read:zone", "post:write:zone",
+        // -- Normalisation et Denormalisation Commande
+        "commande:get:collection", "commande:read:post", "commande:read:write"
+    ])]
     private $nom;
 
     #[ORM\Column(type: 'float', nullable: true)]
-    #[Groups(["read:zone", "write:zone", "collection:zone", "commande:get:collection", "commande:read:post", "commande:read:write"])]
+    #[Groups([
+        // -- Normalisation et Denormalisation Zone
+        "collection:get:zone", "post:read:zone", "post:write:zone",
+        // -- Normalisation et Denormalisation Commande
+        "commande:get:collection", "commande:read:post", "commande:read:write"
+    ])]
     private $prix_zone;
 
     #[ORM\OneToMany(mappedBy: 'zone', targetEntity: Livraison::class)]
     private $livraisons;
 
     #[ORM\OneToMany(mappedBy: 'zone', targetEntity: Commande::class)]
+    #[Groups(
+        // -- Normalisation et Denormalisation Zone
+        "collection:get:zone"
+    )]
     private Collection $commandes;
 
     public function __construct()

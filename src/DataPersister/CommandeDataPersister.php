@@ -25,11 +25,21 @@ class CommandeDataPersister implements ContextAwareDataPersisterInterface
 
     public function persist($data, array $context = [])
     {
+        $prixZone = 0;
+        if ($data->getZone() !== null) {
+            $prixZone = $data->getZone()->getPrixZone();
+        } else {
+            $prixZone = 0;
+            $data->setEtat("Payé");
+        }
         foreach ($data->getLigneDeCommandes() as $value) {
             $prix = $value->getProduit()->getPrix();
+            $quantite = $value->getQuantite();
             $value->setPrix($prix);
             $this->manager->persist($value);
-            $maDate = $data->setDate(new DateTime(date("y-m-d")));
+            $data->setPrix($data->getPrix() + $prixZone);
+            $this->manager->persist($data);
+            $maDate = $data->setDate(new \DateTime('now'));
             $this->manager->persist($maDate);
         }
         $this->manager->flush();

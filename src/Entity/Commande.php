@@ -17,8 +17,6 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
         "get" =>
         [
             "method" => "get",
-            // "security" => "is_granted('ROLE_CLIENT')",
-            // "security_message" => "Veuillez vous connecter d'abord",
             "normalization_context" => ["groups" => ["commande:get:collection"]]
         ],
         "post" =>
@@ -33,15 +31,11 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
         "get" =>
         [
             "method" => "get",
-            // "security" => "is_granted('ROLE_CLIENT')",
-            // "security_message" => "Veuillez vous connecter d'abord",
             "normalization_context" => ["groups" => ["commande:get:item"]]
         ],
         "put" =>
         [
             "method" => "put",
-            // "security" => "is_granted('ROLE_GESTIONNAIRE')",
-            // "security_message" => "Vous n'avez aucun droit pour accéder à cette ressource",
             "normalization_context" => ["groups" => ["commande:read:put"]],
             "denormalization_context" => ["groups" => ["commande:write:put"]]
         ]
@@ -53,38 +47,81 @@ class Commande
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["post:livraison:read", "post:livraison:write", "commande:write:post", "commande:read:post", "commande:get:collection"])]
+    #[Groups([
+        "livreur:read",
+        // -- Normalisation et Denormalisation Zone
+        "collection:get:zone", "post:read:zone",
+        // -- Normalisation et Denormalisation Livraison
+        "collection:livraison", "post:livraison:read", "post:livraison:write",
+        // -- Normalisation et Denormalisation Commande
+        "commande:read:post", "commande:get:collection"
+    ])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(["commande:get:collection", "commande:read:put", "commande:write:put", "commande:get:item"])]
+    #[Groups([
+        // -- Normalisation et Denormalisation Zone
+        "collection:get:zone", "post:read:zone",
+        // -- Normalisation et Denormalisation Commande
+        "commande:get:collection", "commande:read:put", "commande:write:put", "commande:get:item"
+    ])]
     private $etat;
 
     #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'commande')]
     private $gestionnaire;
 
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'commandes')]
-    #[Groups(["commande:read:post", "commande:get:collection", "commande:write:post"])]
+    #[Groups([
+        // -- Normalisation et Denormalisation Zone
+        "collection:get:zone", "post:read:zone",
+        // -- Normalisation Livraison
+        "collection:livraison",
+        // -- Normalisation et Denormalisation Commande
+        "commande:read:post", "commande:get:collection", "commande:write:post"
+    ])]
     private $client;
 
     #[ORM\OneToMany(mappedBy: 'commande', targetEntity: LigneDeCommande::class, cascade: ['persist'])]
-    #[Groups(["commande:write:post", "commande:read:post", "commande:get:collection"])]
+    #[Groups([
+        // -- Normalisation et Denormalisation Commande
+        "commande:write:post", "commande:read:post", "commande:get:collection"
+    ])]
     #[SerializedName('produits')]
     private $ligneDeCommandes;
 
     #[ORM\Column(type: 'integer')]
-    #[Groups(["commande:read:post", "commande:get:collection"])]
+    #[Groups([
+        "livreur:read",
+        // -- Normalisation et Denormalisation Zone
+        "collection:get:zone", "post:read:zone",
+        // -- Normalisation et Denormalisation Commande
+        "commande:read:post", "commande:get:collection"
+
+    ])]
     private $prix;
 
     #[ORM\ManyToOne(targetEntity: Livraison::class, inversedBy: 'commandes', cascade: ['persist'])]
+    #[Groups([
+        "commande:get:collection",
+        // -- Normalisation et Denormalisation Zone
+        "collection:get:zone", "post:read:zone",
+    ])]
     private $livraison;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(["commande:get:collection"])]
+    #[Groups([
+        // -- Normalisation et Denormalisation Zone
+        "collection:get:zone",
+        // -- Normalisation Commande
+        "commande:get:collection"
+    ])]
     private ?\DateTimeInterface $date;
 
     #[ORM\ManyToOne(inversedBy: 'commandes')]
-    #[Groups(["commande:read:post", "commande:get:collection", "commande:write:post"])]
+    #[Groups([
+        // -- Normalisation et Denormalisation Commande
+        "commande:read:post", "commande:get:collection", "commande:write:post"
+    ])]
     private ?Zone $zone = null;
 
     public function __construct()

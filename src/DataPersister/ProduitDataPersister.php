@@ -41,7 +41,7 @@ class ProduitDataPersister implements DataPersisterInterface
                     break;
                 } else {
                     $etat = $value->getEtat();
-                    $etat = "Livré";
+                    $etat = "En Cours de Livraison";
                     $value->setEtat($etat);
                 }
             }

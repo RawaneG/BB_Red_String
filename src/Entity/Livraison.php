@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         "post" =>
         [
             "method" => "post",
-            "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            // "security" => "is_granted('ROLE_GESTIONNAIRE')",
             "normalization_context" => ["groups" => ["post:livraison:read"]],
             "denormalization_context" => ["groups" => ["post:livraison:write"]]
         ]
@@ -44,26 +44,41 @@ class Livraison
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups([
+        "livreur:read",
+        // -- Normalisation et Denormalisation Zone
+        "collection:get:zone", "post:read:zone",
+        // // -- Normalisation et Denormalisation Commande
+        // "commande:get:collection"
+    ])]
     private $id;
 
     #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'livraison')]
-    #[Groups(["post:livraison:read"])]
+    #[Groups(["post:livraison:read", "post:livraison:write"])]
     private $gestionnaire;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    #[Groups(["post:livraison:read"])]
+    #[Groups(["post:livraison:read", "collection:livraison", "post:livraison:write"])]
     private $prix_livraison;
 
     #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'livraisons')]
-    #[Groups(["post:livraison:read", "post:livraison:write"])]
+    #[Groups(["post:livraison:read", "post:livraison:write", "collection:livraison"])]
     private $zone;
 
     #[ORM\OneToMany(mappedBy: 'livraison', targetEntity: Commande::class)]
-    #[Groups(["post:livraison:read", "post:livraison:write"])]
+    #[Groups(["post:livraison:read", "post:livraison:write", "collection:livraison", "livreur:read"])]
     private $commandes;
 
     #[ORM\ManyToOne(targetEntity: Livreur::class, inversedBy: 'livraisons')]
-    #[Groups(["post:livraison:read", "post:livraison:write"])]
+    #[Groups([
+
+        // -- Normalisation et Denormalisation Zone
+        "collection:get:zone", "post:read:zone",
+        // -- Normalisation et Denormalisation Commande
+        "commande:get:collection",
+        // -- Normalisation et Denormalisation LIvraison
+        "post:livraison:read", "post:livraison:write", "collection:livraison"
+    ])]
     private $livreur;
 
     public function __construct()

@@ -31,7 +31,15 @@ class Livreur extends User
     private $gestionnaire;
 
     #[ORM\OneToMany(mappedBy: 'livreur', targetEntity: Livraison::class)]
+    #[Groups(["livreur:read"])]
     private $livraisons;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups([
+        // -- Normalisation et Denormalisation Livreur
+        "livreur:write", "livreur:read"
+    ])]
+    private ?string $etat = null;
 
     public function getMatriculeMoto(): ?string
     {
@@ -83,6 +91,18 @@ class Livreur extends User
                 $livraison->setLivreur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?string $etat): self
+    {
+        $this->etat = $etat;
 
         return $this;
     }

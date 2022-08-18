@@ -37,10 +37,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     #[Groups([
-        "client:read",
-        "collection:post_burger:read", "collection:post_frites:read", "collection:post_boissons:read", "collection:post_taille:read",
-        "item:put_burger:read", "item:put_frites:read", "item:put_taille:read", "item:put_boissons:read",
+        // -- Normalisation et Denormalisation Zone
+        "collection:get:zone", "post:read:zone",
+        // -- Normalisation Livraison
+        "collection:livraison",
+        // -- Normalisation User
+        "client:read", "livreur:read", "livreur:write",
+        // -- Normalisation Burger
+        "collection:post_burger:read", "item:put_burger:read",
+        // -- Normalisation Frites
+        "collection:post_frites:read", "item:put_frites:read",
+        // -- Normalisation Boissons
+        "collection:post_boissons:read", "item:put_boissons:read",
+        // -- Normalisation Taille de Boissons
+        "collection:post_taille:read", "item:put_taille:read",
+        // -- Normalisation et Denormalisation Commande
         "commande:write:post", "commande:read:post", "commande:get:collection",
+        // -- Normalisation et Denormalisation Livraison
         "post:livraison:read", "post:livraison:write"
     ])]
     protected $id;
@@ -50,15 +63,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         message: 'The email {{ value }} is not a valid email.',
     )]
     #[Groups([
+        // -- Normalisation et Denormalisation User
         "client:read", "client:write", "gestionnaire:read", "gestionnaire:write", "livreur:read", "livreur:write",
-        "collection:post_burger:read", "collection:post_frites:read", "collection:post_boissons:read", "collection:post_taille:read",
-        "item:put_burger:read", "item:put_frites:read", "item:put_taille:read", "item:put_boissons:read",
+        // -- Normalisation Burger
+        "collection:post_burger:read", "item:put_burger:read",
+        // -- Normalisation Frites
+        "collection:post_frites:read", "item:put_frites:read",
+        // -- Normalisation Boissons
+        "collection:post_boissons:read", "item:put_boissons:read",
+        // -- Normalisation Taille Boissons
+        "collection:post_taille:read", "item:put_taille:read",
+        // -- Normalisation Commande
         "commande:read:post", "commande:get:item"
     ])]
     protected $login;
 
     #[ORM\Column(type: 'json')]
     #[Groups([
+        // -- Normalisation User
         "client:read", "gestionnaire:read", "livreur:read"
     ])]
     protected $roles = [];
@@ -68,25 +90,50 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[SerializedName("password")]
     #[Groups([
+        // -- Denormalisation User
         "client:write", "gestionnaire:write", "livreur:write"
     ])]
     private $plainPassword;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
+        // -- Normalisation et Denormalisation Zone
+        "collection:get:zone", "post:read:zone",
+        // -- Normalisation et Denormalisation User
         "client:read", "client:write", "gestionnaire:read", "gestionnaire:write", "livreur:read", "livreur:write",
-        "collection:post_burger:read", "collection:post_frites:read", "collection:post_boissons:read", "collection:post_taille:read",
-        "item:put_burger:read", "item:put_frites:read", "item:put_taille:read", "item:put_boissons:read",
-        "commande:read:post", "commande:get:item", "post:livraison:read"
+        // -- Normalisation Burger
+        "collection:post_burger:read", "item:put_burger:read",
+        // -- Normalisation Frites
+        "collection:post_frites:read", "item:put_frites:read",
+        // -- Normalisation Boissons
+        "collection:post_boissons:read", "item:put_boissons:read",
+        // -- Normalisation Tailles Boissons
+        "collection:post_taille:read", "item:put_taille:read",
+        // -- Normalisation Commande
+        "commande:read:post", "commande:get:item", "commande:get:collection",
+        // -- Normalisation Livraison
+        "post:livraison:read"
     ])]
     protected $nom;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
+        // -- Normalisation et Denormalisation Zone
+        "collection:get:zone", "post:read:zone",
+        // -- Normalisation et Denormalisation User
         "client:read", "client:write", "gestionnaire:read", "gestionnaire:write", "livreur:read", "livreur:write",
-        "collection:post_burger:read", "collection:post_frites:read", "collection:post_boissons:read", "collection:post_taille:read",
-        "item:put_burger:read", "item:put_frites:read", "item:put_taille:read", "item:put_boissons:read",
-        "commande:read:post", "commande:get:item", "post:livraison:read"
+        // -- Normalisation Burger
+        "collection:post_burger:read", "item:put_burger:read",
+        // -- Normalisation Frites
+        "collection:post_frites:read", "item:put_frites:read",
+        // -- Normalisation Boissons
+        "collection:post_boissons:read", "item:put_boissons:read",
+        // -- Normalisation Tailles Boissons
+        "collection:post_taille:read", "item:put_taille:read",
+        // -- Normalisation Commande
+        "commande:read:post", "commande:get:item", "commande:get:collection",
+        // -- Normalisation Livraison
+        "post:livraison:read"
     ])]
     protected $prenom;
 
