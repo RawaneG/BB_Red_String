@@ -18,8 +18,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         "post" =>
         [
             "method" => "post",
-            "security" => "is_granted('ROLE_GESTIONNAIRE')",
-            "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
+            // "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            // "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
             "normalization_context" => ["groups" => ["collection:post_frites:read"]],
             "denormalization_context" => ["groups" => ["collection:post_frites:write"]]
         ]
@@ -28,8 +28,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         "put" =>
         [
             "method" => "put",
-            "security" => "is_granted('ROLE_GESTIONNAIRE')",
-            "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
+            // "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            // "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
             "normalization_context" => ["groups" => ["item:put_frites:read"]],
             "denormalization_context" => ["groups" => ["item:put_frites:write"]]
         ],

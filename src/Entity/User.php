@@ -54,7 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // -- Normalisation et Denormalisation Commande
         "commande:write:post", "commande:read:post", "commande:get:collection",
         // -- Normalisation et Denormalisation Livraison
-        "post:livraison:read", "post:livraison:write"
+        "post:livraison:read", "post:livraison:write", "item:livraison"
     ])]
     protected $id;
 
@@ -74,7 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // -- Normalisation Taille Boissons
         "collection:post_taille:read", "item:put_taille:read",
         // -- Normalisation Commande
-        "commande:read:post", "commande:get:item"
+        "commande:read:post", "commande:get:item", "commande:get:collection"
     ])]
     protected $login;
 
@@ -112,7 +112,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // -- Normalisation Commande
         "commande:read:post", "commande:get:item", "commande:get:collection",
         // -- Normalisation Livraison
-        "post:livraison:read"
+        "post:livraison:read", "item:livraison"
     ])]
     protected $nom;
 
@@ -133,7 +133,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // -- Normalisation Commande
         "commande:read:post", "commande:get:item", "commande:get:collection",
         // -- Normalisation Livraison
-        "post:livraison:read"
+        "post:livraison:read", "item:livraison"
     ])]
     protected $prenom;
 

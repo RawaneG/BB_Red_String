@@ -47,7 +47,7 @@ class ProduitDataPersister implements DataPersisterInterface
             }
         } else if ($data instanceof Produit) {
             if ($data->getVraiImage()) {
-                $data->setImage(($data->getVraiImage()));
+                $data->setImage(file_get_contents($data->getVraiImage()));
             } else {
                 dd("Vous n'avez pas récupéré l'image");
             }

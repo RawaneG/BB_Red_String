@@ -81,3 +81,18 @@ opérations sur votre entité. Ou tout simplement vous avez écrit le nom du con
 Car ce dernier ne doit pas posséder de chaines de caractère.
 
 Solution => "controller" => MonController::class au lieu de "controller" => "MonController::class"
+
+9 - The total number of joined relations has exceeded the specified maximum. Raise the limit if necessary
+with the "api_platform.eager_loading.max_joins" configuration key (https://api-platform.com/docs/core/performance/#eager-loading),
+or limit the maximum serialization depth using the "enable_max_depth" option of the Symfony
+serializer (https://symfony.com/doc/current/components/serializer.html#handling-serialization-depth).
+
+Solution => Dirigez-vous vers le dossier "config", puis vous vous dirigez vers "packages" et
+ensuite "api_platform.yaml". Dans ce fichier vous y mettez les commandes suivantes :
+"eager_loading:" et "force_eager: false". Faites en sorte de bien respecter les indentations (décalages de code)
+et il n'y a pas de ";" après ces commandes.
+<!-- ========== Début Exemple ========== -->
+api_platform:
+  eager_loading:
+    force_eager: false
+<!-- ========== Fin Exemple ========== -->

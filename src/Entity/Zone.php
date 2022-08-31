@@ -32,21 +32,23 @@ class Zone
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     #[Groups([
+        "item:livraison",
         // -- Normalisation et Denormalisation Zone
         "collection:get:zone", "post:read:zone",
         // -- Normalisation et Denormalisation Livraison
         "collection:livraison", "post:livraison:write",
         // -- Normalisation et Denormalisation Commande
-        "commande:get:collection", "commande:read:post", "commande:write:post"
+        "commande:get:collection", "commande:read:post", "commande:write:post", "commande:get:item"
     ])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Groups([
+        "item:livraison",
         // -- Normalisation et Denormalisation Zone
         "collection:get:zone", "post:read:zone", "post:write:zone",
         // -- Normalisation et Denormalisation Commande
-        "commande:get:collection", "commande:read:post", "commande:read:write"
+        "commande:get:collection", "commande:read:post", "commande:read:write", "commande:get:item"
     ])]
     private $nom;
 
@@ -55,7 +57,7 @@ class Zone
         // -- Normalisation et Denormalisation Zone
         "collection:get:zone", "post:read:zone", "post:write:zone",
         // -- Normalisation et Denormalisation Commande
-        "commande:get:collection", "commande:read:post", "commande:read:write"
+        "commande:get:collection", "commande:read:post", "commande:read:write", "commande:get:item"
     ])]
     private $prix_zone;
 

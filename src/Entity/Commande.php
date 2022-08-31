@@ -52,14 +52,15 @@ class Commande
         // -- Normalisation et Denormalisation Zone
         "collection:get:zone", "post:read:zone",
         // -- Normalisation et Denormalisation Livraison
-        "collection:livraison", "post:livraison:read", "post:livraison:write",
+        "collection:livraison", "post:livraison:read", "post:livraison:write", "item:livraison",
         // -- Normalisation et Denormalisation Commande
-        "commande:read:post", "commande:get:collection"
+        "commande:read:post", "commande:get:collection", "commande:get:item"
     ])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
+        "collection:livraison", "put:livraison:write", "item:livraison",
         // -- Normalisation et Denormalisation Zone
         "collection:get:zone", "post:read:zone",
         // -- Normalisation et Denormalisation Commande
@@ -77,7 +78,7 @@ class Commande
         // -- Normalisation Livraison
         "collection:livraison",
         // -- Normalisation et Denormalisation Commande
-        "commande:read:post", "commande:get:collection", "commande:write:post"
+        "commande:read:post", "commande:get:collection", "commande:write:post", "item:livraison", "commande:get:item"
     ])]
     private $client;
 
@@ -95,14 +96,14 @@ class Commande
         // -- Normalisation et Denormalisation Zone
         "collection:get:zone", "post:read:zone",
         // -- Normalisation et Denormalisation Commande
-        "commande:read:post", "commande:get:collection"
+        "commande:read:post", "commande:get:collection", "item:livraison", "commande:get:item"
 
     ])]
     private $prix;
 
     #[ORM\ManyToOne(targetEntity: Livraison::class, inversedBy: 'commandes', cascade: ['persist'])]
     #[Groups([
-        "commande:get:collection",
+        "commande:get:collection", "commande:write:put",
         // -- Normalisation et Denormalisation Zone
         "collection:get:zone", "post:read:zone",
     ])]
@@ -113,16 +114,20 @@ class Commande
         // -- Normalisation et Denormalisation Zone
         "collection:get:zone",
         // -- Normalisation Commande
-        "commande:get:collection"
+        "commande:get:collection", "item:livraison", "commande:get:item"
     ])]
     private ?\DateTimeInterface $date;
 
     #[ORM\ManyToOne(inversedBy: 'commandes')]
     #[Groups([
         // -- Normalisation et Denormalisation Commande
-        "commande:read:post", "commande:get:collection", "commande:write:post"
+        "commande:read:post", "commande:get:collection", "commande:write:post", "item:livraison", "commande:get:item"
     ])]
     private ?Zone $zone = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(["item:livraison", "commande:read:post", "commande:get:collection", "commande:get:item"])]
+    private ?int $code = null;
 
     public function __construct()
     {
@@ -246,6 +251,18 @@ class Commande
     public function setZone(?Zone $zone): self
     {
         $this->zone = $zone;
+
+        return $this;
+    }
+
+    public function getCode(): ?int
+    {
+        return $this->code;
+    }
+
+    public function setCode(?int $code): self
+    {
+        $this->code = $code;
 
         return $this;
     }

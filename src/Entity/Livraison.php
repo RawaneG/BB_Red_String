@@ -45,7 +45,7 @@ class Livraison
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     #[Groups([
-        "livreur:read",
+        "livreur:read", "item:livraison",
         // -- Normalisation et Denormalisation Zone
         "collection:get:zone", "post:read:zone",
         // // -- Normalisation et Denormalisation Commande
@@ -58,7 +58,7 @@ class Livraison
     private $gestionnaire;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    #[Groups(["post:livraison:read", "collection:livraison", "post:livraison:write"])]
+    #[Groups(["post:livraison:read", "collection:livraison", "post:livraison:write", "item:livraison"])]
     private $prix_livraison;
 
     #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'livraisons')]
@@ -66,7 +66,7 @@ class Livraison
     private $zone;
 
     #[ORM\OneToMany(mappedBy: 'livraison', targetEntity: Commande::class)]
-    #[Groups(["post:livraison:read", "post:livraison:write", "collection:livraison", "livreur:read"])]
+    #[Groups(["post:livraison:read", "post:livraison:write", "collection:livraison", "put:livraison:write", "livreur:read", "item:livraison"])]
     private $commandes;
 
     #[ORM\ManyToOne(targetEntity: Livreur::class, inversedBy: 'livraisons')]
@@ -75,7 +75,7 @@ class Livraison
         // -- Normalisation et Denormalisation Zone
         "collection:get:zone", "post:read:zone",
         // -- Normalisation et Denormalisation Commande
-        "commande:get:collection",
+        "commande:get:collection", "commande:write:put",
         // -- Normalisation et Denormalisation LIvraison
         "post:livraison:read", "post:livraison:write", "collection:livraison"
     ])]

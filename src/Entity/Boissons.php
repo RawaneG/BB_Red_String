@@ -20,8 +20,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         "post" =>
         [
             "method" => "post",
-            "security" => "is_granted('ROLE_GESTIONNAIRE')",
-            "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
+            // "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            // "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
             "normalization_context" => ["groups" => ["collection:post_boissons:read"]],
             "denormalization_context" => ["groups" => ["collection:post_boissons:write"]]
         ]
@@ -30,8 +30,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         "put" =>
         [
             "method" => "put",
-            "security" => "is_granted('ROLE_GESTIONNAIRE')",
-            "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
+            // "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            // "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
             "normalization_context" => ["groups" => ["item:put_boissons:read"]],
             "denormalization_context" => ["groups" => ["item:put_boissons:write"]]
         ],

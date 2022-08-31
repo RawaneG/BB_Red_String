@@ -18,8 +18,8 @@ use Doctrine\Common\Collections\ArrayCollection;
         "post" =>
         [
             "method" => "post",
-            "security" => "is_granted('ROLE_GESTIONNAIRE')",
-            "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
+            // "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            // "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
             "normalization_context" => ["groups" => ["collection:post_burger:read"]],
             "denormalization_context" => ["groups" => ["collection:post_burger:write"]]
         ]
@@ -28,8 +28,8 @@ use Doctrine\Common\Collections\ArrayCollection;
         "put" =>
         [
             "method" => "put",
-            "security" => "is_granted('ROLE_GESTIONNAIRE')",
-            "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
+            // "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            // "security_message" => "Vous n'êtes pas autorisé à utiliser ce service",
             "normalization_context" => ["groups" => ["item:put_burger:read"]],
             "denormalization_context" => ["groups" => ["item:put_burger:write"]]
         ],

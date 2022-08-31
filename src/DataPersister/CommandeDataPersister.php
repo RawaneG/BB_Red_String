@@ -22,7 +22,17 @@ class CommandeDataPersister implements ContextAwareDataPersisterInterface
     {
         return $data instanceof Commande;
     }
+    function countDigits($MyNum)
+    {
+        $MyNum = (int)$MyNum;
+        $count = 0;
 
+        while ($MyNum != 0) {
+            $MyNum = (int)($MyNum / 10);
+            $count++;
+        }
+        return $count;
+    }
     public function persist($data, array $context = [])
     {
         $prixZone = 0;
@@ -32,6 +42,8 @@ class CommandeDataPersister implements ContextAwareDataPersisterInterface
             $prixZone = 0;
             $data->setEtat("Payé");
         }
+        $code = rand(1000, 9999);
+        $data->setCode($code);
         foreach ($data->getLigneDeCommandes() as $value) {
             $prix = $value->getProduit()->getPrix();
             $quantite = $value->getQuantite();

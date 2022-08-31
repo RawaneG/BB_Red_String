@@ -25,12 +25,13 @@ class Client extends User
     }
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups([
+        "item:livraison",
         // -- Normalisation et Denormalisation Zone
         "collection:get:zone",
         // -- Normalisation et Denormalisation Client
         "client:read", "client:write",
         // -- Normalisation et Denormalisation Commande
-        "commande:read:post", "commande:get:collection"
+        "commande:read:post", "commande:get:collection", "commande:get:item"
     ])]
     private $telephone;
 

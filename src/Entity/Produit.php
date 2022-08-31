@@ -58,7 +58,7 @@ abstract class Produit
     ])]
     protected $nom;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'integer')]
     #[Groups([
         // -- Normalisation et Denormalisation Burger
         "collection:post_burger:write", "collection:post_burger:read", "collection:get_burger", "item:put_burger:write", "item:put_burger:read", "item:get_burger",
